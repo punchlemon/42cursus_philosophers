@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/01 16:27:33 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/01 12:53:01by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,56 +30,72 @@ int	print_timestamp(int philo_i, const char *src, t_time *time)
 
 int	philo_take_a_fork(t_philo *philo, t_fork *fork)
 {
-	(void)fork;/// forkを取れてるかどうかを確かめる
-	print_timestamp(philo->i, "has taken a fork", NULL);
-	return (0);
+	int	ret;
+
+	if (pthread_mutex_lock(fork) == 0)
+	{
+		ret = print_timestamp(philo->i, "has taken a fork", NULL);
+		if (ret != 0)
+			return (ERROR);
+		return (GET_FORK);
+	}
+	return (1);
+}
+
+int	philo_think(t_philo *philo, int *born)
+{
+	if (*born)
+	{
+		*born = 1;
+		usleep(philo->i * 10 * 1000);
+	}
+	print_timestamp(philo->i, "is thinking", NULL);
+	philo->status = THINKING;
+	if (philo_take_a_fork(philo, philo->left_fork) == GET_FORK
+		&& philo_take_a_fork(philo, philo->right_fork) == GET_FORK)
+		return (EATING);
+	if (1) // if you can sleep
+		return (SLEEPING);
 }
 
 int	philo_eat(t_philo *philo)
 {
 	print_timestamp(philo->i, "is eating", &(philo->last_eat_usec));
 	philo->status = EATING;
-	usleep(philo->data.time_to_eat * 1000);
-	return (0);
-}
-
-int	philo_think(t_philo *philo)
-{
-	if (philo->status != THINKING)
-	{
-		print_timestamp(philo->i, "is thinking", NULL);
-		philo->status = THINKING;
-	}
-	// forkが取れるかどうかを模索中
-	philo_take_a_fork(philo, philo->left_fork);
-	philo_take_a_fork(philo, philo->right_fork);
+	usleep(philo->data.time_to_eat);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 	return (0);
 }
 
 int	philo_sleep(t_philo *philo)
 {
 	print_timestamp(philo->i, "is sleeping", NULL);
-	usleep(philo->data.time_to_sleep * 1000);
+	usleep(philo->data.time_to_sleep);
 	return (0);
 }
 
 void	*philo_life(void *arg)
 {
-	int		ret;
 	void	*retval;
 	t_philo	*philo;
+	int		born;
+	int		next_move;
 
 	(void)retval;
 	philo = (t_philo *)arg;
+	born = 0;
 	while (1)
 	{
-		if (philo->i % 2)// 奇数の人は食べても問題ない    哲学者の総数が奇数の場合にはかなり実装が異なる
-			ret = philo_eat(philo);
-		else
-			philo_think(philo);
-		philo_sleep(philo);
-		if (ret != 0)
-			return ((void *)NULL);// (void *)retだとエラーが出た
+		next_move = philo_think(philo, &born);
+		if (next_move == EATING)
+			philo_eat(philo);
+		else if (next_move == SLEEPING)
+			philo_sleep(philo);
+		else if (next_move == DIED)
+			return ((void *)NULL);
+		else if (next_move == ERROR)
+			return ((void *)NULL);// Wanna tell Error
 	}
-	return ((void *)0);
+	return ((void *)0); // Cannt reachable
 }

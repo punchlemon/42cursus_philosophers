@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/01 11:22:47 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/01 12:09:37 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	init_data(t_data *data, int argc, const char **argv)
 {
 	data->num_of_philos = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
+	data->time_to_die = ft_atoi(argv[2]) * 1000;
+	data->time_to_eat = ft_atoi(argv[3]) * 1000;
+	data->time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc == 5)
 		data->num_of_times_each_philo_must_eat = 0;
 	else
@@ -36,7 +36,7 @@ int	main(const int argc, const char **argv)
 	if (argc > 4)
 	{
 		init_data(&data, argc, argv);
-		deb_print_data(data);
+		// deb_print_data(data);
 		if (run(&ret, data, &philos, &forks))
 		{
 		}

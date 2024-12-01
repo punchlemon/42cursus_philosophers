@@ -6,17 +6,19 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/01 11:47:42 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/01 12:53:55 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# define EATING 0
-# define SLEEPING 1
-# define THINKING 2
-# define DIED 3
+# define ERROR -1
+# define GET_FORK 0
+# define EATING 1
+# define SLEEPING 2
+# define THINKING 3
+# define DIED 4
 
 # include <unistd.h>
 # include <stdio.h>
