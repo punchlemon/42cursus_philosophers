@@ -6,19 +6,12 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/01 12:53:55 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:09:33 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# define ERROR -1
-# define GET_FORK 0
-# define EATING 1
-# define SLEEPING 2
-# define THINKING 3
-# define DIED 4
 
 # include <unistd.h>
 # include <stdio.h>
@@ -26,6 +19,20 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include "libft.h"
+
+enum
+{
+	FIRST = 0,
+	SECOND_AFTER,
+};
+
+enum
+{
+	ALIVE = 0,
+	THINKING_DIE,
+	SLEEPING_DIE,
+	DEAD,
+};
 
 // structs
 typedef struct s_data
@@ -45,27 +52,34 @@ typedef struct s_philo
 {
 	pthread_t	tid;
 	int			i;
-	int			status;
+	int			born;
+	int			die;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
-	t_data		data;
-	suseconds_t	last_eat_usec;
+	t_data		d;
+	suseconds_t	last_eat_time;
+	t_time		time_to_eat;
+	t_time		time_to_sleep;
+	t_time		time_between_eat;
+	t_time		odd_delay_time;
+	t_time		delta_delay_time;
 }	t_philo;
 
 // functions
 // deb
 void	deb_ft_put_argv_fd(const int fd, const int argc, const char **argv);
-void	deb_print_data(t_data data);
+void	deb_print_data(t_data d);
+
 // destroy
 void	destroy(int num_of_forks, t_philo *philos, t_fork *forks);
 
 // init
-// int		create_philos(int *ret, t_data data, t_philo **philos, t_fork *forks);
+// int		create_philos(int *ret, t_data d, t_philo **philos, t_fork *forks);
 // int		create_forks(int *ret, int num_of_forks, t_fork **forks);
-// void	init_data(t_data *data, int argc, const char **argv);
-int		run(int *ret, t_data data, t_philo ** philos, t_fork **forks);
+// void	init_data(t_data *d, int argc, const char **argv);
+int		run(int *ret, t_data d, t_philo **philos, t_fork **forks);
+
 // life
 void	*philo_life(void *arg);
-
 
 #endif
