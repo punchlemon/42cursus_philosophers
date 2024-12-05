@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/05 15:04:31 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:39:06 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,18 @@ enum
 {
 	ALIVE = 0,
 	THINKING_DIE,
+	EATING_DIE,
 	SLEEPING_DIE,
 	DEAD,
 	END,
 };
 
-// structs
+// typedefs
+typedef pthread_mutex_t	t_fork;
+typedef pthread_mutex_t	t_flag;
+typedef struct timeval	t_timeval;
+typedef suseconds_t		t_time;
+
 typedef struct s_flags
 {
 	t_flag	printable;
@@ -52,11 +58,6 @@ typedef struct s_data
 	int	num_of_times_each_philo_must_eat;
 }	t_data;
 
-typedef pthread_mutex_t	t_fork;
-typedef pthread_mutex_t	t_flag;
-typedef struct timeval	t_timeval;
-typedef suseconds_t		t_time;
-
 typedef struct s_philo
 {
 	pthread_t	tid;
@@ -71,9 +72,9 @@ typedef struct s_philo
 	t_time		time_to_die;
 	t_time		time_to_eat;
 	t_time		time_to_sleep;
-	t_time		time_to_think;
+	t_time		time_to_first_think;
+	t_time		time_to_second_after_think;
 	int			num_of_times_each_philo_must_eat;
-	t_time		delta_delay_time;
 }	t_philo;
 
 // functions

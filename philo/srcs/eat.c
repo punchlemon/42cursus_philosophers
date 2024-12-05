@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/05 14:58:57 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:39:15 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	get_fork(t_philo *p)
 int	philo_eat(t_philo *p)
 {
 	get_fork(p);
-	if (check_print_time(p, "is eating") != END);
+	if (check_print_time(p, "is eating") != END)
 		usleep(p->time_to_eat);
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
