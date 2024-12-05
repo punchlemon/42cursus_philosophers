@@ -22,9 +22,14 @@ $(addsuffix .c, \
 	$(addprefix $(SRCS_DIR)/, \
 		deb \
 		destroy \
-		run \
+		die \
+		eat \
 		life \
 		main \
+		print_time \
+		run \
+		sleep \
+		think \
 	) \
 ) \
 
