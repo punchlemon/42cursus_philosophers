@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:01:22 by retanaka          #+#    #+#             */
-/*   Updated: 2024/11/28 16:13:31 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/05 08:55:14 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	destroy_forks(int num_of_forks, t_fork *forks)
 
 void	destroy(int num_of_forks, t_philo *philos, t_fork *forks)
 {
+	pthread_mutex_destroy(&((*philos).flags->checkable));
+	pthread_mutex_destroy(&((*philos).flags->printable));
 	free(philos);
 	destroy_forks(num_of_forks, forks);
 	free(forks);
