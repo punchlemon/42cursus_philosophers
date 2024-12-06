@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/05 15:39:15 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:39:59 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,12 @@
 
 void	get_fork(t_philo *p)
 {
-	while (1)
-	{
-		if (pthread_mutex_lock(p->left_fork) == 0)
-		{
-			if (check_print_time(p, "has taken a fork") == -1)
-				return ;
-			if (pthread_mutex_lock(p->right_fork) == 0)
-			{
-				if (check_print_time(p, "has taken a fork") == -1)
-					return ;
-				break ;
-			}
-			pthread_mutex_unlock(p->left_fork);
-		}
-	}
+	pthread_mutex_lock(p->left_fork);
+	if (check_print_time(p, "has taken a fork") == -1)
+		return ;
+	pthread_mutex_lock(p->right_fork);
+	if (check_print_time(p, "has taken a fork") == -1)
+		return ;
 }
 
 int	philo_eat(t_philo *p)

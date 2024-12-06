@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/05 15:39:06 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:25:06 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ enum
 typedef pthread_mutex_t	t_fork;
 typedef pthread_mutex_t	t_flag;
 typedef struct timeval	t_timeval;
-typedef suseconds_t		t_time;
+// typedef suseconds_t		t_time;
+typedef long			t_time;
 
 typedef struct s_flags
 {
