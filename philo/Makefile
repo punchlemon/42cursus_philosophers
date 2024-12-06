@@ -1,9 +1,6 @@
 .PHONY: all clean fclean re val norm test
 NAME = philo
 
-LIBFT_DIR = libft
-LIBFT_A = libft.a
-
 INCLUDES_DIR = includes
 SRCS_DIR = srcs
 OUT_DIR = out
@@ -20,10 +17,10 @@ WHITE = \033[37m
 SRCS = \
 $(addsuffix .c, \
 	$(addprefix $(SRCS_DIR)/, \
-		deb \
 		destroy \
 		die \
 		eat \
+		ft_atoi \
 		life \
 		main \
 		print_time \
@@ -42,33 +39,22 @@ CFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I$(INCLUDES_DIR) -I$(INCLUDES_DIR)/analysis -I$(LIBFT_DIR)/$(INCLUDES_DIR)
 LFLAGS = -lreadline -L$(LIBFT_DIR) -lft
 VFLAGS = \
-	--track-origins=yes \
 	--leak-check=full \
 	--show-leak-kinds=all \
-	# --show-leak-kinds=definite,indirect
-	--suppressions=readline.supp \
-	--gen-suppressions=all \
-	--trace-children=yes \
-	--track-fds=yes \
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_DIR)/$(LIBFT_A) | $(OBJS)
+$(NAME): $(OBJS)
 	@$(CC) $(OBJS) $(LFLAGS) -o $@
-
-$(LIBFT_DIR)/$(LIBFT_A):
-	@make $(NPD_FLAG) -C $(LIBFT_DIR) all
 
 $(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
-	@make $(NPD_FLAG) -C $(LIBFT_DIR) clean
 	@$(RM) -r $(OUT_DIR)
 
 fclean: clean
-	@make $(NPD_FLAG) -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME) $(VALGRIND_LOG)
 
 re: fclean all
@@ -86,7 +72,6 @@ val:
 	@valgrind $(VFLAGS) ./$(NAME) 2> $(VALGRIND_LOG)
 
 norm:
-	@$(call check_norminette, $(LIBFT_DIR))
 	@$(call check_norminette, $(SRCS_DIR))
 	@$(call check_norminette, $(INCLUDES_DIR))
 
@@ -101,30 +86,3 @@ define check_norminette
 		$(call ok, $1": "); \
 	fi
 endef
-
-TEST_DIR = test
-SUCCESS_TXT = success.txt
-FAILURE_TXT = failure.txt
-
-test: re
-	@echo "[$(YELLOW)success test$(RESET)]"
-	@while IFS= read -r line; do \
-		echo ====================; \
-		if (echo "$$line"; echo exit) | ./$(NAME) | grep -Eq "minishell: syntax error|minishell: malloc error"; then \
-			echo "$$line"; echo "$(RED)KO!!!!!!$(RESET)"; \
-		else \
-			echo "$$line"; echo "$(GREEN)OK$(RESET)"; \
-		fi; \
-	done < $(TEST_DIR)/$(SUCCESS_TXT)
-	@echo ====================;
-	@echo ; echo ; echo ;
-	@echo "[$(YELLOW)failure test$(RESET)]"
-	@while IFS= read -r line; do \
-		echo ====================; \
-		if (echo "$$line"; echo exit) | ./$(NAME) | grep -Eq "minishell: syntax error|minishell: malloc error"; then \
-			echo "$$line"; echo "$(GREEN)OK$(RESET)"; \
-		else \
-			echo "$$line"; echo "$(RED)KO!!!!!!$(RESET)"; \
-		fi; \
-	done < $(TEST_DIR)/$(FAILURE_TXT)
-	@echo ====================;

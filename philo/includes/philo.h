@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/05 17:25:06 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:44:27 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
-# include "libft.h"
 
 enum
 {
@@ -79,12 +78,11 @@ typedef struct s_philo
 }	t_philo;
 
 // functions
-// deb
-void	deb_ft_put_argv_fd(const int fd, const int argc, const char **argv);
-void	deb_print_data(t_data d);
-
 // eat
 int		philo_eat(t_philo *p);
+
+// ft_atoi
+int		ft_atoi(const char *str);
 
 // sleep
 int		philo_sleep(t_philo *p);

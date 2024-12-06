@@ -97,12 +97,11 @@ int	set_philo(t_philo *p, int i, t_data d, t_fork *forks)
 	return (ret);
 }
 
-int	create_philos(t_data d, t_philo **ps_p, t_fork *forks)
+int	create_philos(t_data d, t_philo **ps_p, t_fork *forks, t_flags *flags)
 {
 	int		i;
 	int		ret;
 	t_philo	*p;
-	t_flags	flags;
 
 	ret = 0;
 	*ps_p = malloc(sizeof(t_philo) * d.num_of_philos);
@@ -113,7 +112,7 @@ int	create_philos(t_data d, t_philo **ps_p, t_fork *forks)
 	{
 		p = &((*ps_p)[i]);
 		p->i = i;
-		p->flags = &flags;
+		p->flags = flags;
 		ret = set_philo(p, i, d, forks);
 		if (ret != 0)
 			return (ret);
@@ -143,12 +142,14 @@ int	wait_philos(int num_of_philos, t_philo *philos)
 
 int	run(t_data d, t_philo **philos, t_fork **forks)
 {
-	int	ret;
+	int		ret;
+	t_flags	flags;
 
+	flags.died = 0; // init
 	ret = create_forks(d.num_of_philos, forks);
 	if (ret != 0)
 		return (ret);
-	ret = create_philos(d, philos, *forks);
+	ret = create_philos(d, philos, *forks, &flags);
 	if (ret != 0)
 		return (ret);
 	ret = wait_philos(d.num_of_philos, *philos);

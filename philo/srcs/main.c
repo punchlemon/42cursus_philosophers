@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/04 16:00:29 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:43:09 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(const int argc, const char **argv)
 		}
 	}
 	else
-		return (ft_putendl_fd(2, "Error"), 1);
+		return (write(2, "Error\n", 6), 1);
 	destroy(d.num_of_philos, philos, forks);
 	return (ret);
 }
