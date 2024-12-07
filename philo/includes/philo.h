@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 13:44:27 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:38:17 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_flags
 {
 	t_flag	printable;
 	t_flag	checkable;
+	t_flag	startable;
 	int		died;
 }	t_flags;
 
@@ -69,6 +70,7 @@ typedef struct s_philo
 	t_fork		*right_fork;
 	suseconds_t	last_eat_time;
 	int			num_of_philos;
+	t_time		start;
 	t_time		time_to_die;
 	t_time		time_to_eat;
 	t_time		time_to_sleep;
