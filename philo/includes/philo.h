@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 20:38:17 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:46:01 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ enum
 
 enum
 {
+	SUCCESS = 0,
+	FAILURE
+};
+
+enum
+{
 	ALIVE = 0,
-	THINKING_DIE,
-	EATING_DIE,
-	SLEEPING_DIE,
 	DEAD,
 	END,
 };
@@ -47,6 +50,7 @@ typedef struct s_flags
 	t_flag	printable;
 	t_flag	checkable;
 	t_flag	startable;
+	t_time	start_time;
 	int		died;
 }	t_flags;
 
@@ -68,9 +72,10 @@ typedef struct s_philo
 	t_flags		*flags;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
-	suseconds_t	last_eat_time;
+	t_time		start_time;
+	t_time		dead_time;
+	t_time		last_move_time;
 	int			num_of_philos;
-	t_time		start;
 	t_time		time_to_die;
 	t_time		time_to_eat;
 	t_time		time_to_sleep;
@@ -80,37 +85,39 @@ typedef struct s_philo
 }	t_philo;
 
 // functions
-// eat
-int		philo_eat(t_philo *p);
+// destroy
+void	destroy(int num_of_forks, t_philo *philos, t_fork *forks);
 
 // ft_atoi
 int		ft_atoi(const char *str);
 
-// sleep
-int		philo_sleep(t_philo *p);
+// life
+void	*philo_life(void *arg);
 
-// think
-void	philo_think(t_philo *p);
+// main
 
-// print_time
-t_time	get_time(void);
-void	print_time(t_philo *p, const char *src);
-int		check_print_time(t_philo *p, const char *src);
+// my_sleep
+int		my_sleep(t_time goal, t_philo *p);
 
-// die
+// philo_die
 int		check_other_die(t_philo *p);
 void	philo_die(t_philo *p);
 
-// destroy
-void	destroy(int num_of_forks, t_philo *philos, t_fork *forks);
+// philo_eat
+int		philo_eat(t_philo *p);
 
-// init
-// int		create_philos(int *ret, t_data d, t_philo **philos, t_fork *forks);
-// int		create_forks(int *ret, int num_of_forks, t_fork **forks);
-// void	init_data(t_data *d, int argc, const char **argv);
+// philo_sleep
+int		philo_sleep(t_philo *p);
+
+// philo_think
+int		philo_think(t_philo *p);
+
+// print_time
+t_time	get_time(void);
+void	print_time(t_philo *p, const char *src, t_time now);
+t_time	check_print_time(t_philo *p, const char *src);
+
+// run
 int		run(t_data d, t_philo **philos, t_fork **forks);
-
-// life
-void	*philo_life(void *arg);
 
 #endif

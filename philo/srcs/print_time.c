@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 13:34:39 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:17:57 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,26 @@ t_time	get_time(void)
 	return (time);
 }
 
-void	print_time(t_philo *p, const char *src)
+void	print_time(t_philo *p, const char *src, t_time now)
+{
+	pthread_mutex_lock(&(p->flags->printable));
+	printf("%ld %d %s\n", now, p->i, src);
+	pthread_mutex_unlock(&(p->flags->printable));
+}
+
+t_time	check_print_time(t_philo *p, const char *src)
 {
 	t_time	now;
 
 	now = get_time();
-	pthread_mutex_lock(&(p->flags->printable));
-	if (src)
-		printf("%ld %d %s\n", now, p->i, src);
-	pthread_mutex_unlock(&(p->flags->printable));
-	return ;
-}
-
-int	check_print_time(t_philo *p, const char *src)
-{
-	pthread_mutex_lock(&(p->flags->checkable));
-	if (p->flags->died == DEAD)
-		p->die = END;
-	else
-		print_time(p, src);
-	pthread_mutex_unlock(&(p->flags->checkable));
-	return (p->die);
+	if (now >= p->dead_time)
+		return (philo_die(p), FAILURE);
+	else if (src)
+	{
+		pthread_mutex_lock(&(p->flags->checkable));
+		if (p->flags->died != END)
+			print_time(p, src, now);
+		pthread_mutex_unlock(&(p->flags->checkable));
+	}
+	return (now);
 }

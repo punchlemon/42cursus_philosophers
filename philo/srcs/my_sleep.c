@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   life.c                                             :+:      :+:    :+:   */
+/*   my_sleep.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 21:41:58 by retanaka         ###   ########.fr       */
+/*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
+/*   Updated: 2024/12/07 13:20:24 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*philo_life(void *arg)
+int	my_sleep(t_time goal, t_philo *p)
 {
-	void	*retval;
-	t_philo	*p;
+	t_time	now;
 
-	(void)retval;
-	p = (t_philo *)arg;
-	if (p->i == 0)
+	now = get_time();
+	while (now < goal)
 	{
-		pthread_mutex_lock(&p->flags->startable);
-		p->start = get_time();
-		pthread_mutex_unlock(&p->flags->startable);
+		now = get_time();
+		if (now >= p->dead_time)
+			return (philo_die(p), FAILURE);
 	}
-
-
-	while (1)
-	{
-		philo_think(p);
-		if (p->die == DEAD || p->die == END)
-			return ((void *)0);
-	}
-	return ((void *)0); // Cant reachable
+	return (SUCCESS);
 }

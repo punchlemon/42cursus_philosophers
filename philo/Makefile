@@ -18,15 +18,16 @@ SRCS = \
 $(addsuffix .c, \
 	$(addprefix $(SRCS_DIR)/, \
 		destroy \
-		die \
-		eat \
 		ft_atoi \
-		life \
 		main \
+		my_sleep \
+		philo_die \
+		philo_eat \
+		philo_life \
+		philo_sleep \
+		philo_think \
 		print_time \
 		run \
-		sleep \
-		think \
 	) \
 ) \
 
@@ -36,8 +37,7 @@ DEPS = $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
 NPD_FLAG = --no-print-directory
 
 CFLAGS = -Wall -Werror -Wextra
-IFLAGS = -I$(INCLUDES_DIR) -I$(INCLUDES_DIR)/analysis -I$(LIBFT_DIR)/$(INCLUDES_DIR)
-LFLAGS = -lreadline -L$(LIBFT_DIR) -lft
+IFLAGS = -I$(INCLUDES_DIR)
 VFLAGS = \
 	--leak-check=full \
 	--show-leak-kinds=all \

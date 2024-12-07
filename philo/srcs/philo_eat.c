@@ -1,33 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eat.c                                              :+:      :+:    :+:   */
+/*   philo_eat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 20:39:59 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:14:54y retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	get_fork(t_philo *p)
+int	get_fork(t_philo *p)
 {
+	if (!p->right_fork)
+		return (FAILURE);
 	pthread_mutex_lock(p->left_fork);
-	if (check_print_time(p, "has taken a fork") == -1)
-		return ;
+	if (check_print_time(p, "has taken a fork") == FAILURE)
+		return (pthread_mutex_unlock(p->left_fork), FAILURE);
 	pthread_mutex_lock(p->right_fork);
-	if (check_print_time(p, "has taken a fork") == -1)
-		return ;
+	if (check_print_time(p, "has taken a fork") == FAILURE)
+		return (pthread_mutex_unlock(p->left_fork)
+			, pthread_mutex_unlock(p->right_fork), FAILURE);
+	return (SUCCESS);
 }
 
 int	philo_eat(t_philo *p)
 {
-	get_fork(p);
-	if (check_print_time(p, "is eating") != END)
-		usleep(p->time_to_eat);
+	t_time	now;
+	int		ret;
+
+	if (get_fork(p) == FAILURE)
+		return (FAILURE);
+	now = check_print_time(p, "is eating");
+	if (now == FAILURE)
+		return (FAILURE);
+	p->dead_time = now + p->time_to_die;
+	ret = my_sleep(p->last_move_time + p->time_to_eat, p);
+	p->last_move_time = now;
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
-	return (p->die);
+	return (ret);
 }

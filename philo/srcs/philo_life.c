@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   think.c                                            :+:      :+:    :+:   */
+/*   philo_life.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 15:03:47 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 13:00:55 by retanaka         ###   ########.fr       */
+/*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
+/*   Updated: 2024/12/07 13:55:13 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_think(t_philo *p)
+void	*philo_life(void *arg)
 {
-	if (check_print_time(p, "is thinking") == END)
-		return ;
-	if (p->born == FIRST)
+	t_philo	*p;
+
+	p = (t_philo *)arg;
+	while (1)
 	{
-		p->born = SECOND_AFTER;
-		usleep(p->time_to_first_think);
+		if (philo_think(p) == FAILURE)
+			return ((void *)p);
+		if (philo_eat(p) == FAILURE)
+			return ((void *)p);
+		if (philo_sleep(p) == FAILURE)
+			return ((void *)p);
 	}
-	else
-		usleep(p->time_to_second_after_think);
-	if (p->die == THINKING_DIE)
-		return (philo_die(p));
-	if (philo_eat(p) == END)
-		return ;
-	if (philo_sleep(p) == END)
-		return ;
-	if (p->die == SLEEPING_DIE)
-		return (philo_die(p));
+	return ((void *)p); // Cant reachable
 }

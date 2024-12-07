@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/06 13:43:09 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:21:59 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	main(const int argc, const char **argv)
 	if (argc > 4)
 	{
 		init_data(&d, argc, argv);
-		// deb_print_data(d);
 		if (run(d, &philos, &forks))
 		{
 		}
