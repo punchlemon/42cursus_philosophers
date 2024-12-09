@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 17:50:04 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:11:36 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_philo
 
 // functions
 // destroy
+void	destroy_forks(int num_of_forks, t_fork *forks);
 void	destroy(int num_of_forks, t_philo *philos, t_fork *forks);
 
 // ft_atoi
@@ -117,7 +118,13 @@ t_time	get_time(void);
 void	print_time(t_philo *p, const char *src, t_time now);
 t_time	check_print_time(t_philo *p, const char *src);
 
+// put_stderr
+int		put_stderr(const char *src);
+
 // run
 int		run(t_data d, t_philo **philos, t_fork **forks, t_flags *flags);
+
+// valid
+int		valid_data(int argc, t_data d);
 
 #endif

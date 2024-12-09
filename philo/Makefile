@@ -27,7 +27,9 @@ $(addsuffix .c, \
 		philo_sleep \
 		philo_think \
 		print_time \
+		put_stderr \
 		run \
+		valid \
 	) \
 ) \
 
@@ -62,7 +64,6 @@ re: fclean all
 de:
 	@clear
 	@make $(NPD_FLAG) re
-	@./$(NAME)
 
 VALGRIND_LOG = valgrind.log
 

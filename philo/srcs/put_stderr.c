@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_life.c                                       :+:      :+:    :+:   */
+/*   put_stderr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:10:42 by retanaka         ###   ########.fr       */
+/*   Created: 2024/12/09 22:54:44 by retanaka          #+#    #+#             */
+/*   Updated: 2024/12/09 22:56:32 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <unistd.h>
 
-void	*philo_life(void *arg)
+size_t	ft_strlen(const char *src)
 {
-	t_philo	*p;
+	size_t	len;
 
-	p = (t_philo *)arg;
-	while (1)
-	{
-		if (philo_think(p) == FAILURE)
-			return ((void *)p);
-		if (philo_eat(p) == FAILURE)
-			return ((void *)p);
-		if (philo_sleep(p) == FAILURE)
-			return ((void *)p);
-	}
-	return ((void *)p);
+	len = 0;
+	while (src[len])
+		len++;
+	return (len);
+}
+
+int	put_stderr(const char *src)
+{
+	return (write(2, src, ft_strlen(src)));
 }
