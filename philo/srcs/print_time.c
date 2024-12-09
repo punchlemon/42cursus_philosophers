@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 16:33:51 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 18:07:13 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_time	get_time(void)
 void	print_time(t_philo *p, const char *src, t_time now)
 {
 	pthread_mutex_lock(&(p->flags->printable));
-	printf("%ld %d %s\n", now, p->i, src);
+	printf("%ld %d %s\n", now, p->i + 1, src);
 	pthread_mutex_unlock(&(p->flags->printable));
 }
 
