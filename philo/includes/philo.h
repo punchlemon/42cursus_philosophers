@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/07 13:46:01 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:12:26 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	*philo_life(void *arg);
 int		my_sleep(t_time goal, t_philo *p);
 
 // philo_die
-int		check_other_die(t_philo *p);
 void	philo_die(t_philo *p);
 
 // philo_eat
@@ -118,6 +117,6 @@ void	print_time(t_philo *p, const char *src, t_time now);
 t_time	check_print_time(t_philo *p, const char *src);
 
 // run
-int		run(t_data d, t_philo **philos, t_fork **forks);
+int		run(t_data d, t_philo **philos, t_fork **forks, t_flags *flags);
 
 #endif

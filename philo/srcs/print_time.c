@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/07 13:17:57 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:33:51 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,26 @@ t_time	check_print_time(t_philo *p, const char *src)
 	t_time	now;
 
 	now = get_time();
-	if (now >= p->dead_time)
-		return (philo_die(p), FAILURE);
-	else if (src)
 	{
 		pthread_mutex_lock(&(p->flags->checkable));
-		if (p->flags->died != END)
+		if (now >= p->dead_time)
+		{
+			if (p->flags->died == END)
+				p->die = END;
+			else
+			{
+				print_time(p, "died", now);
+				p->die = DEAD;
+				p->flags->died = END;
+			}
+		}
+		if (p->flags->died == END)
+			p->die = END;
+		else
 			print_time(p, src, now);
 		pthread_mutex_unlock(&(p->flags->checkable));
+		if (p->die != ALIVE)
+			return (FAILURE);
 	}
 	return (now);
 }

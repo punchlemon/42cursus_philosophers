@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/07 13:42:37 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:03:07 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ int	create_forks(int num_of_forks, t_fork **forks)
 	return (SUCCESS);
 }
 
-int	set_flags(t_flags *f)
-{
-	if (pthread_mutex_init(&(f->checkable), NULL) != 0)
-		return (FAILURE);
-	if (pthread_mutex_init(&(f->printable), NULL) != 0)
-		return (pthread_mutex_destroy(&(f->checkable)), FAILURE);
-	f->start_time = -1;
-	f->died = ALIVE;
-	return (SUCCESS);
-}
-
 int	set_philo(t_philo *p, int i, t_data d, t_fork *forks)
 {
 	t_time	delta_delay_time;
@@ -52,9 +41,6 @@ int	set_philo(t_philo *p, int i, t_data d, t_fork *forks)
 	p->time_to_die = d.time_to_die;
 	p->num_of_times_each_philo_must_eat = d.num_of_times_each_philo_must_eat;
 
-	if (set_flags(p->flags) == FAILURE)
-		return (FAILURE);
-	
 	if (p->num_of_philos % 2)
 		delta_delay_time = p->time_to_eat * 2 / (p->num_of_philos - 1);
 	else
@@ -103,28 +89,9 @@ int	create_philos(t_data d, t_philo **ps_p, t_fork *forks, t_flags *flags)
 	return (SUCCESS);
 }
 
-int	wait_philos(int num_of_philos, t_philo *philos)
+int	run(t_data d, t_philo **philos, t_fork **forks, t_flags *flags)
 {
-	int		i;
-
-	i = 0;
-	while (i < num_of_philos)
-	{
-		if (pthread_join(philos[i].tid, NULL) != 0)
-			return (FAILURE);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-int	run(t_data d, t_philo **philos, t_fork **forks)
-{
-	t_flags	flags;
-
-	flags.died = 0; // init
 	if (create_forks(d.num_of_philos, forks) == FAILURE)
 		return (FAILURE);
-	if (create_philos(d, philos, *forks, &flags) == FAILURE)
-		return (FAILURE);
-	return (wait_philos(d.num_of_philos, *philos));
+	return (create_philos(d, philos, *forks, flags));
 }

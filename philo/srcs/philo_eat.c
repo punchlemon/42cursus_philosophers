@@ -28,17 +28,20 @@ int	get_fork(t_philo *p)
 
 int	philo_eat(t_philo *p)
 {
-	t_time	now;
 	int		ret;
 
+	ret = FAILURE;
 	if (get_fork(p) == FAILURE)
 		return (FAILURE);
-	now = check_print_time(p, "is eating");
-	if (now == FAILURE)
+	p->last_move_time = check_print_time(p, "is eating");
+	if (p->last_move_time == FAILURE)
+	{
+		pthread_mutex_unlock(p->left_fork);
+		pthread_mutex_unlock(p->right_fork);
 		return (FAILURE);
-	p->dead_time = now + p->time_to_die;
+	}
+	p->dead_time = p->last_move_time + p->time_to_die;
 	ret = my_sleep(p->last_move_time + p->time_to_eat, p);
-	p->last_move_time = now;
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
 	return (ret);

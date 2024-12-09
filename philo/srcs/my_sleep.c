@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/07 13:20:24 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:17:34 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	my_sleep(t_time goal, t_philo *p)
 		now = get_time();
 		if (now >= p->dead_time)
 			return (philo_die(p), FAILURE);
+		usleep(1000);
 	}
 	return (SUCCESS);
 }
