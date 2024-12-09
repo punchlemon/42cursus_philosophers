@@ -1,5 +1,5 @@
 .PHONY: all clean fclean re val norm test
-NAME = philo
+NAME = philosopher
 
 INCLUDES_DIR = includes
 SRCS_DIR = srcs
