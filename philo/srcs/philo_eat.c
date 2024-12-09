@@ -6,11 +6,18 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:10:29 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:36:38 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	check_end(t_philo *p, int i)
+{
+	if (p->argc < 6)
+		return (0);
+	return (i >= p->num_of_times_each_philo_must_eat);
+}
 
 int	get_fork(t_philo *p)
 {
@@ -26,7 +33,7 @@ int	get_fork(t_philo *p)
 	return (SUCCESS);
 }
 
-int	philo_eat(t_philo *p)
+int	philo_eat(t_philo *p, int i)
 {
 	int		ret;
 
@@ -44,5 +51,12 @@ int	philo_eat(t_philo *p)
 	ret = my_sleep(p->last_move_time + p->time_to_eat, p);
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
+	if (p->i == (p->num_of_philos - 2) && check_end(p, i))
+	{
+		pthread_mutex_lock(&(p->flags->checkable));
+		p->flags->died = END;
+		pthread_mutex_unlock(&(p->flags->checkable));
+		return (FAILURE);
+	}
 	return (ret);
 }

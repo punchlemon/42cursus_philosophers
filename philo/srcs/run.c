@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:12:24 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:19:54 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	set_philo(t_philo *p, int i, t_data d, t_fork *forks)
 	p->time_to_sleep = d.time_to_sleep;
 	p->time_to_die = d.time_to_die;
 	p->num_of_times_each_philo_must_eat = d.num_of_times_each_philo_must_eat;
+	p->argc = d.argc;
 	if (p->num_of_philos % 2)
 		delta_delay_time = p->time_to_eat * 2 / (p->num_of_philos - 1);
 	else

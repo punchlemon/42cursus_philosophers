@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:11:36 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:31:15 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_data
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	num_of_times_each_philo_must_eat;
+	int	argc;
 }	t_data;
 
 typedef struct s_philo
@@ -70,6 +71,7 @@ typedef struct s_philo
 	int			i;
 	int			born;
 	int			die;
+	int			argc;
 	t_flags		*flags;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
@@ -105,7 +107,7 @@ int		my_sleep(t_time goal, t_philo *p);
 void	philo_die(t_philo *p);
 
 // philo_eat
-int		philo_eat(t_philo *p);
+int		philo_eat(t_philo *p, int i);
 
 // philo_sleep
 int		philo_sleep(t_philo *p);
