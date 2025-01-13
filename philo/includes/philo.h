@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/11 13:25:02retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/14 02:17:16 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ enum
 	PVALS_LEN,
 };
 
-typedef pthread_t t_tid;
+typedef pthread_t		t_tid;
 typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_pval
@@ -59,7 +59,7 @@ typedef struct s_pval
 	long	value;
 }	t_pval;
 
-typedef t_pval t_fork;
+typedef t_pval			t_fork;
 
 typedef struct s_data
 {

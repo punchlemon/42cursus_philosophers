@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/13 15:26:50 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/14 02:17:38 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	philo_eat(t_philo *p)
 	ret = FAILURE;
 	while (check_fork(p) == FAILURE)
 		usleep(500);
-		// my_sleep(get_time() + 5, p);
 	get_fork(p);
 	now = print_with_timestamp_safe(p, "is eating");
 	if (now == FAILURE)

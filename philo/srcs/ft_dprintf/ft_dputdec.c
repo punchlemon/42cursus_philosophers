@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:20:07 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/07 10:14:33 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/14 02:16:48 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_dputdec_check(int fd, int n, char format, int *count)
 {
 	unsigned long long	u_n;
-	t_form	f;
+	t_form				f;
 
 	if (n < 0 && format != 'u')
 	{
