@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put_stderr.c                                       :+:      :+:    :+:   */
+/*   ft_dputptr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 22:54:44 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 22:56:32 by retanaka         ###   ########.fr       */
+/*   Created: 2024/05/10 14:20:07 by retanaka          #+#    #+#             */
+/*   Updated: 2025/01/07 10:16:21 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "ft_dprintf.h"
 
-size_t	ft_strlen(const char *src)
+int	ft_dputptr_check(int fd, unsigned long long p, int *count)
 {
-	size_t	len;
+	t_form	f;
 
-	len = 0;
-	while (src[len])
-		len++;
-	return (len);
-}
-
-int	put_stderr(const char *src)
-{
-	return (write(2, src, ft_strlen(src)));
+	ft_dputstr_check(fd, "0x", count);
+	if (*count == -1)
+		return (*count);
+	f.fmt = 'p';
+	f.base = 16;
+	ft_dputnumber_check(fd, p, f, count);
+	return (*count);
 }

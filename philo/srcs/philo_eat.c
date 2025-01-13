@@ -6,57 +6,60 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:36:38 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:26:50 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_end(t_philo *p, int i)
+int	check_fork(t_philo *p)
 {
-	if (p->argc < 6)
-		return (0);
-	return (i >= p->num_of_times_each_philo_must_eat);
-}
+	long	value;
 
-int	get_fork(t_philo *p)
-{
-	if (!p->right_fork)
+	value = get_mutex_value(p->left_fork);
+	if (value == p->id + 1)
 		return (FAILURE);
-	pthread_mutex_lock(p->left_fork);
-	if (check_print_time(p, "has taken a fork") == FAILURE)
-		return (pthread_mutex_unlock(p->left_fork), FAILURE);
-	pthread_mutex_lock(p->right_fork);
-	if (check_print_time(p, "has taken a fork") == FAILURE)
-		return (pthread_mutex_unlock(p->left_fork)
-			, pthread_mutex_unlock(p->right_fork), FAILURE);
+	value = get_mutex_value(p->right_fork);
+	if (value == p->id + 1)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
-int	philo_eat(t_philo *p, int i)
+void	release_fork(t_philo *p)
+{
+	pthread_mutex_unlock(&p->left_fork->mutex);
+	pthread_mutex_unlock(&p->right_fork->mutex);
+}
+
+void	get_fork(t_philo *p)
+{
+	pthread_mutex_lock(&p->left_fork->mutex);
+	p->left_fork->value = p->id + 1;
+	print_with_timestamp_safe(p, "has taken a fork");
+	pthread_mutex_lock(&p->right_fork->mutex);
+	p->right_fork->value = p->id + 1;
+	print_with_timestamp_safe(p, "has taken a fork");
+}
+
+int	philo_eat(t_philo *p)
 {
 	int		ret;
+	long	now;
 
 	ret = FAILURE;
-	if (get_fork(p) == FAILURE)
+	while (check_fork(p) == FAILURE)
+		usleep(500);
+		// my_sleep(get_time() + 5, p);
+	get_fork(p);
+	now = print_with_timestamp_safe(p, "is eating");
+	if (now == FAILURE)
+		return (release_fork(p), FAILURE);
+	p->dead_time = now + p->d.time_to_die;
+	ret = my_sleep(now + p->d.time_to_eat, p);
+	release_fork(p);
+	if (ret == FAILURE)
 		return (FAILURE);
-	p->last_move_time = check_print_time(p, "is eating");
-	if (p->last_move_time == FAILURE)
-	{
-		pthread_mutex_unlock(p->left_fork);
-		pthread_mutex_unlock(p->right_fork);
-		return (FAILURE);
-	}
-	p->dead_time = p->last_move_time + p->time_to_die;
-	ret = my_sleep(p->last_move_time + p->time_to_eat, p);
-	pthread_mutex_unlock(p->left_fork);
-	pthread_mutex_unlock(p->right_fork);
-	if (p->i == (p->num_of_philos - 2) && check_end(p, i))
-	{
-		pthread_mutex_lock(&(p->flags->checkable));
-		p->flags->died = END;
-		pthread_mutex_unlock(&(p->flags->checkable));
-		return (FAILURE);
-	}
-	return (ret);
+	if (p->d.argc == ARGC_MAX)
+		p->d.num_of_times_to_eat--;
+	return (SUCCESS);
 }

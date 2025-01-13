@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   ft_dputhex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 16:01:22 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/13 12:30:23 by retanaka         ###   ########.fr       */
+/*   Created: 2024/05/10 14:20:07 by retanaka          #+#    #+#             */
+/*   Updated: 2025/01/07 10:15:07 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "ft_dprintf.h"
 
-void	destroy(int num_of_frks, t_philo *philos, t_fork *forks, t_pval *pvals)
+int	ft_dputhex_check(int fd, unsigned int n, char format, int *count)
 {
-	destroy_mutexes(PVALS_LEN, pvals);
-	free(philos);
-	if (forks != NULL)
-	{
-		destroy_mutexes(num_of_frks, forks);
-		free(forks);
-	}
+	t_form	f;
+
+	f.fmt = format;
+	f.base = 16;
+	return (ft_dputnumber_check(fd, (unsigned long long)n, f, count));
 }

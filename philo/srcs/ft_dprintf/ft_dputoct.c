@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_die.c                                        :+:      :+:    :+:   */
+/*   ft_dputoct.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 15:00:40 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 16:34:07 by retanaka         ###   ########.fr       */
+/*   Created: 2024/05/10 14:20:07 by retanaka          #+#    #+#             */
+/*   Updated: 2025/01/07 10:15:48 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "ft_dprintf.h"
 
-void	philo_die(t_philo *p)
+int	ft_dputoct_check(int fd, unsigned int n, int *count)
 {
-	int		die;
-	t_time	now;
+	t_form	f;
 
-	pthread_mutex_lock(&(p->flags->checkable));
-	die = p->flags->died;
-	if (die != END)
-	{
-		now = get_time();
-		p->flags->died = END;
-		print_time(p, "died", now);
-	}
-	pthread_mutex_unlock(&(p->flags->checkable));
-	if (die != END)
-		p->die = DEAD;
-	else
-		p->die = END;
+	f.fmt = 'o';
+	f.base = 8;
+	return (ft_dputnumber_check(fd, (unsigned long long)n, f, count));
 }

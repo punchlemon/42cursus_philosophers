@@ -4,6 +4,7 @@ NAME = philo
 INCLUDES_DIR = includes
 SRCS_DIR = srcs
 OUT_DIR = out
+FT_DPRINTF_DIR = ft_dprintf
 
 RESET = \033[0m
 RED = \033[31m
@@ -17,19 +18,26 @@ WHITE = \033[37m
 SRCS = \
 $(addsuffix .c, \
 	$(addprefix $(SRCS_DIR)/, \
+		$(addprefix $(FT_DPRINTF_DIR)/, \
+			ft_dprintf_base_check \
+			ft_dprintf_base \
+			ft_dprintf \
+			ft_dputdec \
+			ft_dputhex \
+			ft_dputnumber_base \
+			ft_dputoct \
+			ft_dputptr \
+		) \
+		abort \
+		create \
 		destroy \
 		ft_atoi \
 		main \
+		mutex \
 		my_sleep \
-		philo_die \
 		philo_eat \
 		philo_life \
-		philo_sleep \
-		philo_think \
-		print_time \
-		put_stderr \
-		run \
-		valid \
+		set_and_check_data \
 	) \
 ) \
 
@@ -47,7 +55,7 @@ VFLAGS = \
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LFLAGS) -o $@
+	@$(CC) $(CFLAS) $(OBJS) $(LFLAGS) -o $@
 
 $(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)

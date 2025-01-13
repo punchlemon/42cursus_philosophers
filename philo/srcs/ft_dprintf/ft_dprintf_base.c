@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_sleep.c                                      :+:      :+:    :+:   */
+/*   ft_dprintf_base.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 15:02:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 16:32:27 by retanaka         ###   ########.fr       */
+/*   Created: 2024/05/10 13:53:02 by retanaka          #+#    #+#             */
+/*   Updated: 2025/01/07 10:00:43 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "ft_dprintf.h"
 
-int	philo_sleep(t_philo *p)
+int	ft_dputchar(int fd, char c)
 {
-	t_time	now;
+	return (write(fd, &c, 1));
+}
 
-	now = check_print_time(p, "is sleeping");
-	if (now == FAILURE)
-		return (FAILURE);
-	if (my_sleep(now + p->time_to_sleep, p))
-		return (FAILURE);
-	p->last_move_time = now;
-	return (SUCCESS);
+int	ft_dputstr(int fd, char *s)
+{
+	size_t	i;
+
+	if (s == NULL)
+		return (write(fd, "(null)", 6));
+	i = -1;
+	while (*(s + ++i) != '\0')
+		;
+	return (write(fd, s, i));
 }

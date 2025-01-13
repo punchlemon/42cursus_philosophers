@@ -6,54 +6,60 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/12/09 23:31:15 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/11 13:25:02retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# define ARGC_MIN 5
+# define ARGC_MAX 6
+# define TIME_VALUE_MIN 10
+# define TIME_VALUE_MAX 1000000
+# define NUM_OF_PHILO_MIN 1
+# define NUM_OF_PHILO_MAX 200
+# define KILO 1000
+
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
 
 enum
 {
-	FIRST = 0,
-	SECOND_AFTER,
+	FAILURE = 0,
+	SUCCESS,
 };
 
 enum
 {
-	SUCCESS = 0,
-	FAILURE
+	THREAD_READY = 0,
+	THREAD_RUNNING,
+	THREAD_HALTED,
 };
 
 enum
 {
-	ALIVE = 0,
-	DEAD,
-	END,
+	PRINT_ID = 0,
+	START_ID,
+	STATUS_ID,
+	PVALS_LEN,
 };
 
-// typedefs
-typedef pthread_mutex_t	t_fork;
-typedef pthread_mutex_t	t_flag;
-typedef struct timeval	t_timeval;
-// typedef suseconds_t		t_time;
-typedef long			t_time;
+typedef pthread_t t_tid;
+typedef pthread_mutex_t	t_mutex;
 
-typedef struct s_flags
+typedef struct s_pval
 {
-	t_flag	printable;
-	t_flag	checkable;
-	t_flag	startable;
-	t_time	start_time;
-	int		died;
-}	t_flags;
+	t_mutex	mutex;
+	long	value;
+}	t_pval;
+
+typedef t_pval t_fork;
 
 typedef struct s_data
 {
@@ -61,72 +67,39 @@ typedef struct s_data
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	num_of_times_each_philo_must_eat;
+	int	time_to_think;
+	int	num_of_times_to_eat;
 	int	argc;
 }	t_data;
 
 typedef struct s_philo
 {
-	pthread_t	tid;
-	int			i;
-	int			born;
-	int			die;
-	int			argc;
-	t_flags		*flags;
-	t_fork		*left_fork;
-	t_fork		*right_fork;
-	t_time		start_time;
-	t_time		dead_time;
-	t_time		last_move_time;
-	int			num_of_philos;
-	t_time		time_to_die;
-	t_time		time_to_eat;
-	t_time		time_to_sleep;
-	t_time		time_to_first_think;
-	t_time		time_to_second_after_think;
-	int			num_of_times_each_philo_must_eat;
+	t_tid	tid;
+	long	id;
+	t_data	d;
+
+	t_pval	*pvals;
+	t_fork	*left_fork;
+	t_fork	*right_fork;
+	long	dead_time;
+	long	time_to_first_think;
+	bool	is_dead;
 }	t_philo;
 
-// functions
-// destroy
-void	destroy_forks(int num_of_forks, t_fork *forks);
-void	destroy(int num_of_forks, t_philo *philos, t_fork *forks);
-
-// ft_atoi
+int		func_abort(const char *str1, const char *str2);
+int		proc_abort(const char *str);
+int		create_forks(int num_of_forks, t_fork **forks);
+int		create_philos(t_data d, t_philo **ps_p, t_fork *forks, t_pval *pvals);
+void	destroy(int num_of_frks, t_philo *philos, t_fork *forks, t_pval *pvals);
 int		ft_atoi(const char *str);
-
-// life
 void	*philo_life(void *arg);
-
-// main
-
-// my_sleep
-int		my_sleep(t_time goal, t_philo *p);
-
-// philo_die
-void	philo_die(t_philo *p);
-
-// philo_eat
-int		philo_eat(t_philo *p, int i);
-
-// philo_sleep
-int		philo_sleep(t_philo *p);
-
-// philo_think
-int		philo_think(t_philo *p);
-
-// print_time
-t_time	get_time(void);
-void	print_time(t_philo *p, const char *src, t_time now);
-t_time	check_print_time(t_philo *p, const char *src);
-
-// put_stderr
-int		put_stderr(const char *src);
-
-// run
-int		run(t_data d, t_philo **philos, t_fork **forks, t_flags *flags);
-
-// valid
-int		valid_data(int argc, t_data d);
+long	get_time(void);
+long	print_with_timestamp_safe(t_philo *p, const char *str);
+void	set_mutex_value(t_pval *pval, long value);
+long	get_mutex_value(t_pval *pval);
+void	destroy_mutexes(int num_of_pvals, t_pval *pvals);
+int		my_sleep(long goal, t_philo *p);
+int		philo_eat(t_philo *p);
+int		set_and_check_data(t_data *d, int argc, const char **argv);
 
 #endif
