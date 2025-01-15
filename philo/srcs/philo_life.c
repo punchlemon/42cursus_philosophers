@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/14 02:16:08 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:23:29 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	single_philo_life(t_philo *p)
 	long	time;
 
 	pthread_mutex_lock(&p->left_fork->mutex);
+	time = get_time();
+	printf("%ld %ld is thinking\n", time, p->id + 1);
 	time = get_time();
 	printf("%ld %ld has taken a fork\n", time, p->id + 1);
 	pthread_mutex_unlock(&p->left_fork->mutex);
