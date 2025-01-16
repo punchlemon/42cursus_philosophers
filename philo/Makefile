@@ -59,7 +59,7 @@ $(NAME): $(OBJS)
 
 $(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) -MMD -MP -c $< -o $@
 
 clean:
 	@$(RM) -r $(OUT_DIR)
