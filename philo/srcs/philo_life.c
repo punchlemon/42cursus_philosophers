@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/15 11:23:29 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:33:29 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	single_philo_life(t_philo *p)
 {
 	long	time;
 
-	pthread_mutex_lock(&p->left_fork->mutex);
+	pthread_mutex_lock(&p->first_fork->mutex);
 	time = get_time();
-	printf("%ld %ld is thinking\n", time, p->id + 1);
+	printf("%ld %ld is thinking\n", time, p->id);
 	time = get_time();
-	printf("%ld %ld has taken a fork\n", time, p->id + 1);
-	pthread_mutex_unlock(&p->left_fork->mutex);
+	printf("%ld %ld has taken a fork\n", time, p->id);
+	pthread_mutex_unlock(&p->first_fork->mutex);
 	p->dead_time = time + p->d.time_to_die;
 	my_sleep(p->dead_time, p);
 	p->is_dead = true;
@@ -33,7 +33,7 @@ long	philo_life_init(t_philo *p)
 
 	if (p->d.num_of_philos == 1)
 		return (single_philo_life(p), FAILURE);
-	if (p->id == p->d.num_of_philos - 2)
+	if (p->id == p->d.num_of_philos)
 	{
 		time = get_time() + 20;
 		set_mutex_value(&p->pvals[START_ID], time);

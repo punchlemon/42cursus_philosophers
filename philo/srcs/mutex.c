@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:16:58 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/13 14:42:19 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:29:26 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ long	print_with_timestamp_safe(t_philo *p, const char *str)
 			p->is_dead = true;
 		}
 		else
-			printf("%ld %ld %s\n", now, p->id + 1, str);
+			printf("%ld %ld %s\n", now, p->id, str);
 		pthread_mutex_unlock(&p->pvals[PRINT_ID].mutex);
 	}
 	else

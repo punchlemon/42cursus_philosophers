@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/14 02:17:16 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:27:27 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ typedef struct s_philo
 	t_data	d;
 
 	t_pval	*pvals;
-	t_fork	*left_fork;
-	t_fork	*right_fork;
+	t_fork	*first_fork;
+	t_fork	*second_fork;
 	long	dead_time;
 	long	time_to_first_think;
 	bool	is_dead;

@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:58:42 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/14 02:17:38 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:29:39 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,28 @@ int	check_fork(t_philo *p)
 {
 	long	value;
 
-	value = get_mutex_value(p->left_fork);
-	if (value == p->id + 1)
+	value = get_mutex_value(p->first_fork);
+	if (value == p->id)
 		return (FAILURE);
-	value = get_mutex_value(p->right_fork);
-	if (value == p->id + 1)
+	value = get_mutex_value(p->second_fork);
+	if (value == p->id)
 		return (FAILURE);
 	return (SUCCESS);
 }
 
 void	release_fork(t_philo *p)
 {
-	pthread_mutex_unlock(&p->left_fork->mutex);
-	pthread_mutex_unlock(&p->right_fork->mutex);
+	pthread_mutex_unlock(&p->first_fork->mutex);
+	pthread_mutex_unlock(&p->second_fork->mutex);
 }
 
 void	get_fork(t_philo *p)
 {
-	pthread_mutex_lock(&p->left_fork->mutex);
-	p->left_fork->value = p->id + 1;
+	pthread_mutex_lock(&p->first_fork->mutex);
+	p->first_fork->value = p->id;
 	print_with_timestamp_safe(p, "has taken a fork");
-	pthread_mutex_lock(&p->right_fork->mutex);
-	p->right_fork->value = p->id + 1;
+	pthread_mutex_lock(&p->second_fork->mutex);
+	p->second_fork->value = p->id;
 	print_with_timestamp_safe(p, "has taken a fork");
 }
 
