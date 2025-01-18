@@ -6,33 +6,16 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/18 14:33:29 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 15:23:29 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	single_philo_life(t_philo *p)
-{
-	long	time;
-
-	pthread_mutex_lock(&p->first_fork->mutex);
-	time = get_time();
-	printf("%ld %ld is thinking\n", time, p->id);
-	time = get_time();
-	printf("%ld %ld has taken a fork\n", time, p->id);
-	pthread_mutex_unlock(&p->first_fork->mutex);
-	p->dead_time = time + p->d.time_to_die;
-	my_sleep(p->dead_time, p);
-	p->is_dead = true;
-}
-
 long	philo_life_init(t_philo *p)
 {
 	long	time;
 
-	if (p->d.num_of_philos == 1)
-		return (single_philo_life(p), FAILURE);
 	if (p->id == p->d.num_of_philos)
 	{
 		time = get_time() + 20;
@@ -64,6 +47,44 @@ int	philo_spent_time(t_philo *p, const char *str, long time)
 		return (FAILURE);
 	if (my_sleep(now + time, p) == FAILURE)
 		return (FAILURE);
+	return (SUCCESS);
+}
+
+int	check_and_lock_fork(t_philo *p, t_fork *fork)
+{
+	long	value;
+
+	value = get_mutex_value(fork);
+	if (value == p->id)
+		return (FAILURE);
+	set_mutex_value(fork, p->id);
+	print_with_timestamp_safe(p, "has taken a fork");
+	return (SUCCESS);
+}
+
+int	philo_eat(t_philo *p)
+{
+	int		ret;
+	long	now;
+
+	ret = FAILURE;
+	while (check_and_lock_fork(p, p->fst_fork) == FAILURE)
+		if (my_sleep(get_time() + 1, p) == FAILURE)
+			return (FAILURE);
+	while (check_and_lock_fork(p, p->snd_fork) == FAILURE)
+		if (my_sleep(get_time() + 1, p) == FAILURE)
+			return (FAILURE);
+	now = print_with_timestamp_safe(p, "is eating");
+	if (now == FAILURE)
+		return (FAILURE);
+	p->dead_time = now + p->d.time_to_die;
+	ret = my_sleep(now + p->d.time_to_eat, p);
+	if (ret == FAILURE)
+		return (FAILURE);
+	if (p->d.argc == ARGC_MAX)
+		p->d.num_of_times_to_eat--;
+	set_mutex_value(p->fst_fork, 0);
+	set_mutex_value(p->snd_fork, 0);
 	return (SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/18 14:27:27 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 15:20:18 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ typedef struct s_philo
 	t_data	d;
 
 	t_pval	*pvals;
-	t_fork	*first_fork;
-	t_fork	*second_fork;
+	t_fork	*fst_fork;
+	t_fork	*snd_fork;
 	long	dead_time;
 	long	time_to_first_think;
 	bool	is_dead;
@@ -99,7 +99,6 @@ void	set_mutex_value(t_pval *pval, long value);
 long	get_mutex_value(t_pval *pval);
 void	destroy_mutexes(int num_of_pvals, t_pval *pvals);
 int		my_sleep(long goal, t_philo *p);
-int		philo_eat(t_philo *p);
 int		set_and_check_data(t_data *d, int argc, const char **argv);
 
 #endif

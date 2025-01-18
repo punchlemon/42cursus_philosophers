@@ -35,7 +35,6 @@ $(addsuffix .c, \
 		main \
 		mutex \
 		my_sleep \
-		philo_eat \
 		philo_life \
 		set_and_check_data \
 	) \
