@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/15 11:21:46 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/01/18 13:55:01 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,21 @@ int	create_forks(int num_of_forks, t_fork **forks_p)
 
 void	set_philo(t_philo *p, long i, t_data data, t_fork *forks)
 {
-	long	delta_delay_time;
+	float	delta_delay_time;
 
 	p->id = i;
 	p->d = data;
 	p->is_dead = false;
 	if (p->d.num_of_philos != 1 && p->d.num_of_philos % 2)
-		delta_delay_time = p->d.time_to_eat * 2 / (p->d.num_of_philos - 1);
+		delta_delay_time = p->d.time_to_eat * 2.0 / (p->d.num_of_philos - 1);
 	else
 		delta_delay_time = 0;
 	p->time_to_first_think = 0;
 	if (p->id % 2)
 		p->time_to_first_think += p->d.time_to_eat;
-	p->time_to_first_think += ((p->id + 1) / 2) * delta_delay_time;
+	p->time_to_first_think += (long)(((p->id + 1) / 2) * delta_delay_time);
 	p->d.time_to_think = p->d.time_to_eat - p->d.time_to_sleep
-		+ delta_delay_time;
+		+ (long)delta_delay_time;
 	p->left_fork = &(forks[i]);
 	if (i > 0)
 		p->right_fork = &(forks[i - 1]);
