@@ -54,7 +54,7 @@ VFLAGS = \
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAS) $(OBJS) $(LFLAGS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $@
 
 $(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)
