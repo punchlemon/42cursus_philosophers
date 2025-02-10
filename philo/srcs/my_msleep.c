@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 17:58:02 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:17:40 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	my_msleep(long start, long msec, t_philo *p)
 			return (FAILURE);
 		if (p->dead_time < now)
 			return (set_thread_halted(p), FAILURE);
-		usleep(500);
+		usleep(NYQUIST_INTERVAL);
 		now = get_time();
 	}
 	return (SUCCESS);

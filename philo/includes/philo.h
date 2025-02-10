@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 17:57:51 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:17:23 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define NUM_OF_PHILO_MIN 1
 # define NUM_OF_PHILO_MAX 200
 # define KILO 1000
+# define NYQUIST_INTERVAL 500
 
 # include <unistd.h>
 # include <stdio.h>
