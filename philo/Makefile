@@ -34,7 +34,7 @@ $(addsuffix .c, \
 		ft_atoi \
 		main \
 		mutex \
-		my_sleep \
+		my_msleep \
 		philo_life \
 		set_and_check_data \
 	) \

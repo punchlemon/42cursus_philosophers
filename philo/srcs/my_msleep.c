@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_sleep.c                                         :+:      :+:    :+:   */
+/*   my_msleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 17:56:13 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:58:02 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	set_thread_halted(t_philo *p)
 	pthread_mutex_unlock(&p->pvals[STATUS_ID].mutex);
 }
 
-int	my_sleep(long start, long msec, t_philo *p)
+int	my_msleep(long start, long msec, t_philo *p)
 {
 	long	goal;
 	long	now;

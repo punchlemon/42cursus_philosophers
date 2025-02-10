@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 17:55:22 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:57:44 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ long	philo_life_init(t_philo *p)
 		}
 	}
 	p->dead_time = time + p->d.time_to_die;
-	if (my_sleep(get_time(), time, p) == FAILURE)
+	if (my_msleep(get_time(), time, p) == FAILURE)
 		return (FAILURE);
 	return (time);
 }
@@ -45,7 +45,7 @@ int	philo_spent_time(t_philo *p, const char *str, long time)
 	now = print_with_timestamp_safe(p, str);
 	if (now == FAILURE)
 		return (FAILURE);
-	if (my_sleep(now, time, p) == FAILURE)
+	if (my_msleep(now, time, p) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }
@@ -69,16 +69,16 @@ int	philo_eat(t_philo *p)
 
 	ret = FAILURE;
 	while (check_and_lock_fork(p, p->fst_fork) == FAILURE)
-		if (my_sleep(get_time(), 1, p) == FAILURE)
+		if (my_msleep(get_time(), 1, p) == FAILURE)
 			return (FAILURE);
 	while (check_and_lock_fork(p, p->snd_fork) == FAILURE)
-		if (my_sleep(get_time(), 1, p) == FAILURE)
+		if (my_msleep(get_time(), 1, p) == FAILURE)
 			return (FAILURE);
 	now = print_with_timestamp_safe(p, "is eating");
 	if (now == FAILURE)
 		return (FAILURE);
 	p->dead_time = now + p->d.time_to_die;
-	ret = my_sleep(now, p->d.time_to_eat, p);
+	ret = my_msleep(now, p->d.time_to_eat, p);
 	if (ret == FAILURE)
 		return (FAILURE);
 	if (p->d.argc == ARGC_MAX)
@@ -98,7 +98,7 @@ void	*philo_life(void *arg)
 	if (start_time == FAILURE)
 		return (NULL);
 	print_with_timestamp_safe(p, "is thinking");
-	if (my_sleep(start_time, p->time_to_first_think, p) == FAILURE)
+	if (my_msleep(start_time, p->time_to_first_think, p) == FAILURE)
 		return (NULL);
 	while (true)
 	{
