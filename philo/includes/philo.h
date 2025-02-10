@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/18 15:20:18 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:47:31 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ long	print_with_timestamp_safe(t_philo *p, const char *str);
 void	set_mutex_value(t_pval *pval, long value);
 long	get_mutex_value(t_pval *pval);
 void	destroy_mutexes(int num_of_pvals, t_pval *pvals);
-int		my_sleep(long goal, t_philo *p);
+int		my_sleep(long start, long msec, t_philo *p);
 int		set_and_check_data(t_data *d, int argc, const char **argv);
 
 #endif
