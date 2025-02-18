@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/18 17:10:11 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:18:08 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,29 @@
 
 long	philo_life_init(t_philo *p)
 {
-	long	start;
+	long	start_time;
 	long	now;
 
 	if (p->id == p->d.num_of_philos) {
-		start = get_time() + 20;
-		set_mutex_value(&p->pvals[START_ID], start);
+		start_time = get_time() + 20;
+		set_mutex_value(&p->pvals[START_ID], start_time);
 	}
 	else {
 		while (true)
 		{
 			usleep(NYQUIST_INTERVAL);
-			start = get_mutex_value(&p->pvals[START_ID]);
-			if (start != FAILURE)
+			start_time = get_mutex_value(&p->pvals[START_ID]);
+			if (start_time != FAILURE)
 				break ;
 		}
 	}
-	p->dead_time = start + p->d.time_to_die;
+	p->dead_time = start_time + p->d.time_to_die;
 	now = get_time();
-	while (start > now) {
+	while (start_time > now) {
 		usleep(NYQUIST_INTERVAL);
 		now = get_time();
 	}
-	return (start);
+	return (start_time);
 }
 
 int	philo_spent_time(t_philo *p, const char *str, long time)
