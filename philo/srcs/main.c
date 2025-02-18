@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/14 02:16:02 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:45:24 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,19 @@ int	set_pvals(t_pval *pvals)
 	return (FAILURE);
 }
 
-void	wait_philos(int num_of_philos, t_philo *philos)
+void	wait_philos(int num_of_philos, t_philo *philos, t_pval *pvals)
 {
 	long	i;
 	void	*ret;
 	long	died_id;
 
-	died_id = -1;
 	i = 0;
-	while (i < num_of_philos)
-	{
-		pthread_join(philos[i].tid, &ret);
-		if (philos[i].is_dead)
-			died_id = i;
-		i++;
-	}
-	if (died_id != -1)
-		printf("%ld %ld died\n", get_time(), died_id + 1);
+	pthread_join(philos[i].tid, &ret);
+	died_id = get_mutex_value(&pvals[DIED_ID]);
+	if (died_id != FAILURE && died_id != NUM_OF_PHILO_MAX)
+		printf("%ld %ld died\n", get_time(), died_id);
+	while (++i < num_of_philos)
+		pthread_detach(philos[i].tid);
 }
 
 int	main(const int argc, const char **argv)
@@ -107,7 +103,7 @@ int	main(const int argc, const char **argv)
 		return (destroy(d.num_of_philos, NULL, NULL, pvals), EXIT_FAILURE);
 	if (create_philos(d, &philos, forks, pvals) == FAILURE)
 		return (destroy(d.num_of_philos, NULL, forks, pvals), EXIT_FAILURE);
-	wait_philos(d.num_of_philos, philos);
+	wait_philos(d.num_of_philos, philos, pvals);
 	destroy(d.num_of_philos, philos, forks, pvals);
 	return (EXIT_SUCCESS);
 }

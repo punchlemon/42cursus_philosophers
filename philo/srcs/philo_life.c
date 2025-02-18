@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 18:19:35 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:10:11 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,29 @@
 
 long	philo_life_init(t_philo *p)
 {
-	long	time;
+	long	start;
+	long	now;
 
-	if (p->id == p->d.num_of_philos)
-		set_mutex_value(&p->pvals[START_ID], get_time + 20);
-	time = get_mutex_value(&p->pvals[START_ID]);
-	while (time == FAILURE)
-	{
-		usleep(NYQUIST_INTERVAL);
-		time = get_mutex_value(&p->pvals[START_ID]);
+	if (p->id == p->d.num_of_philos) {
+		start = get_time() + 20;
+		set_mutex_value(&p->pvals[START_ID], start);
 	}
-	p->dead_time = time + p->d.time_to_die;
-	if (my_msleep(get_time(), time, p) == FAILURE)
-		return (FAILURE);
-	return (time);
+	else {
+		while (true)
+		{
+			usleep(NYQUIST_INTERVAL);
+			start = get_mutex_value(&p->pvals[START_ID]);
+			if (start != FAILURE)
+				break ;
+		}
+	}
+	p->dead_time = start + p->d.time_to_die;
+	now = get_time();
+	while (start > now) {
+		usleep(NYQUIST_INTERVAL);
+		now = get_time();
+	}
+	return (start);
 }
 
 int	philo_spent_time(t_philo *p, const char *str, long time)
@@ -89,7 +98,7 @@ void	*philo_life(void *arg)
 	start_time = philo_life_init(p);
 	if (start_time == FAILURE)
 		return (NULL);
-	print_with_timestamp_safe(p, "is thinking");
+	print_with_timestamp_safe(p, "is thinking"); // fault check ??
 	if (my_msleep(start_time, p->time_to_first_think, p) == FAILURE)
 		return (NULL);
 	while (true)

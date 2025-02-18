@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 18:17:23 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:14:37 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,9 @@ enum
 
 enum
 {
-	THREAD_READY = 0,
-	THREAD_RUNNING,
-	THREAD_HALTED,
-};
-
-enum
-{
-	PRINT_ID = 0,
-	START_ID,
-	STATUS_ID,
+	START_ID = 0,
+	DIED_ID,
+	PRINT_ID,
 	PVALS_LEN,
 };
 
@@ -84,7 +77,6 @@ typedef struct s_philo
 	t_fork	*snd_fork;
 	long	dead_time;
 	long	time_to_first_think;
-	bool	is_dead;
 }	t_philo;
 
 int		func_abort(const char *str1, const char *str2);

@@ -6,21 +6,18 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/10 18:17:40 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:42:32 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_thread_halted(t_philo *p)
+void	set_died(t_philo *p)
 {
-	pthread_mutex_lock(&p->pvals[STATUS_ID].mutex);
-	if (p->pvals[STATUS_ID].value != THREAD_HALTED)
-	{
-		p->pvals[STATUS_ID].value = THREAD_HALTED;
-		p->is_dead = true;
-	}
-	pthread_mutex_unlock(&p->pvals[STATUS_ID].mutex);
+	pthread_mutex_lock(&p->pvals[DIED_ID].mutex);
+	if (p->pvals[DIED_ID].value == FAILURE)
+		p->pvals[DIED_ID].value = p->id;
+	pthread_mutex_unlock(&p->pvals[DIED_ID].mutex);
 }
 
 int	my_msleep(long start, long msec, t_philo *p)
@@ -32,10 +29,10 @@ int	my_msleep(long start, long msec, t_philo *p)
 	now = get_time();
 	while (goal > now)
 	{
-		if (get_mutex_value(&p->pvals[STATUS_ID]) == THREAD_HALTED)
+		if (get_mutex_value(&p->pvals[DIED_ID]) != FAILURE)
 			return (FAILURE);
 		if (p->dead_time < now)
-			return (set_thread_halted(p), FAILURE);
+			return (set_died(p), FAILURE);
 		usleep(NYQUIST_INTERVAL);
 		now = get_time();
 	}

@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:16:58 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/18 14:29:26 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:38:12 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,15 @@ long	print_with_timestamp_safe(t_philo *p, const char *str)
 	long	now;
 
 	now = 0;
-	pthread_mutex_lock(&p->pvals[STATUS_ID].mutex);
-	if (p->pvals[STATUS_ID].value != THREAD_HALTED)
+	pthread_mutex_lock(&p->pvals[DIED_ID].mutex);
+	if (p->pvals[DIED_ID].value == FAILURE)
 	{
 		pthread_mutex_lock(&p->pvals[PRINT_ID].mutex);
 		now = get_time();
 		if (p->dead_time < now)
 		{
 			now = FAILURE;
-			p->pvals[STATUS_ID].value = THREAD_HALTED;
-			p->is_dead = true;
+			p->pvals[DIED_ID].value = p->id;
 		}
 		else
 			printf("%ld %ld %s\n", now, p->id, str);
@@ -45,7 +44,7 @@ long	print_with_timestamp_safe(t_philo *p, const char *str)
 	}
 	else
 		now = FAILURE;
-	pthread_mutex_unlock(&p->pvals[STATUS_ID].mutex);
+	pthread_mutex_unlock(&p->pvals[DIED_ID].mutex);
 	return (now);
 }
 
