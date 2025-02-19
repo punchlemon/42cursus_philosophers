@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 16:56:18 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:41:08 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,6 @@ t_data d)
 	_set_philos(philos, forks, super, d);
 	if (_create_philos(philos, tids, d.num_of_philos) == FAILURE)
 		return (FAILURE);
-	destroy_mutexes(forks, RESOURCES_LEN, super);
+	destroy_mutexes(forks, d.num_of_philos, super);
 	return (SUCCESS);
 }
