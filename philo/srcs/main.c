@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/18 16:45:24 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/19 21:27:48 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,14 @@ void	wait_philos(int num_of_philos, t_philo *philos, t_pval *pvals)
 	long	died_id;
 
 	i = 0;
-	pthread_join(philos[i].tid, &ret);
+	pthread_join(philos[i++].tid, &ret);
 	died_id = get_mutex_value(&pvals[DIED_ID]);
-	if (died_id != FAILURE && died_id != NUM_OF_PHILO_MAX)
+	if (died_id != FAILURE && died_id != NUM_OF_PHILO_MAX) // [should be] NUM_OF_PHILO_MAX + 1
 		printf("%ld %ld died\n", get_time(), died_id);
-	while (++i < num_of_philos)
+	while (i < num_of_philos) {
 		pthread_detach(philos[i].tid);
+		i++;
+	}
 }
 
 int	main(const int argc, const char **argv)
