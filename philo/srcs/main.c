@@ -6,106 +6,45 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/19 21:27:48 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:55:52 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	numeric_args(const int argc, const char **argv)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (i < argc)
-	{
-		j = 0;
-		while (argv[i][j])
-		{
-			if (argv[i][j] < '0' || argv[i][j] > '9')
-				return (FAILURE);
-			j++;
-		}
-		if (j == 0)
-			return (FAILURE);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-int	zerofilling_args(const int argc, const char **argv)
-{
-	int	i;
-
-	i = 1;
-	while (i < argc)
-	{
-		if (argv[i][0] == '0' && argv[i][1])
-			return (FAILURE);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-int	set_pvals(t_pval *pvals)
+int	set_resources(t_resource *resources)
 {
 	int	i;
 
 	i = 0;
-	while (i < PVALS_LEN)
+	while (i < RESOURCES_LEN)
 	{
-		if (pthread_mutex_init(&pvals[i].mutex, NULL) != 0)
-			break ;
-		pvals[i].value = FAILURE;
+		if (pthread_mutex_init(&resources[i].mutex, NULL) != 0)
+			return (destroy_mutexes(resources, i),
+				func_abort("mutex creation failure", NULL));
+		resources[i].value = FAILURE;
 		i++;
 	}
-	if (i == PVALS_LEN)
-		return (SUCCESS);
-	while (i)
-		pthread_mutex_destroy(&pvals[--i].mutex);
-	return (FAILURE);
-}
-
-void	wait_philos(int num_of_philos, t_philo *philos, t_pval *pvals)
-{
-	long	i;
-	void	*ret;
-	long	died_id;
-
-	i = 0;
-	pthread_join(philos[i++].tid, &ret);
-	died_id = get_mutex_value(&pvals[DIED_ID]);
-	if (died_id != FAILURE && died_id != NUM_OF_PHILO_MAX) // [should be] NUM_OF_PHILO_MAX + 1
-		printf("%ld %ld died\n", get_time(), died_id);
-	while (i < num_of_philos) {
-		pthread_detach(philos[i].tid);
-		i++;
-	}
+	return (SUCCESS);
 }
 
 int	main(const int argc, const char **argv)
 {
-	t_data	d;
-	t_philo	*philos;
-	t_fork	*forks;
-	t_pval	pvals[PVALS_LEN];
+	int			i;
+	t_data		d;
+	pthread_t	tids[NUM_OF_PHILOS_MAX];
+	t_philo		philos[NUM_OF_PHILOS_MAX];
+	t_resource	resources[RESOURCES_LEN];
 
-	if (argc < ARGC_MIN || argc > ARGC_MAX)
-		return (proc_abort("Wrong number of arguments"));
-	if (numeric_args(argc, argv) == FAILURE)
-		return (proc_abort("Non-numeric arguments"));
-	if (zerofilling_args(argc, argv) == FAILURE)
-		return (proc_abort("Zerofilling number are not accepted"));
-	if (set_pvals(pvals) == FAILURE)
-		return (proc_abort("Mutex creation failure"));
-	if (set_and_check_data(&d, argc, argv) == FAILURE)
+	if (process_input(&d, argc, argv) == FAILURE)
 		return (EXIT_FAILURE);
-	if (create_forks(d.num_of_philos, &forks) == FAILURE)
-		return (destroy(d.num_of_philos, NULL, NULL, pvals), EXIT_FAILURE);
-	if (create_philos(d, &philos, forks, pvals) == FAILURE)
-		return (destroy(d.num_of_philos, NULL, forks, pvals), EXIT_FAILURE);
-	wait_philos(d.num_of_philos, philos, pvals);
-	destroy(d.num_of_philos, philos, forks, pvals);
+	if (set_resources(resources) == FAILURE)
+		return (EXIT_FAILURE);
+	if (create_philos(d, tids, philos, resources) == FAILURE)
+		return (EXIT_FAILURE);
+	i = 0;
+	while (i < d.num_of_philos)
+		pthread_join(tids[i++], NULL);
+	destroy_mutexes(resources, RESOURCES_LEN);
 	return (EXIT_SUCCESS);
 }

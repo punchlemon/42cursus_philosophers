@@ -30,13 +30,14 @@ $(addsuffix .c, \
 		) \
 		abort \
 		create \
-		destroy \
-		ft_atoi \
+		get_time \
 		main \
 		mutex \
 		my_msleep \
+		philo_eat \
 		philo_life \
-		set_and_check_data \
+		print_with_timestamp \
+		process_input \
 	) \
 ) \
 

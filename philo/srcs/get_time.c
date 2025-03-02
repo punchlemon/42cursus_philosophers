@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   get_time.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 16:01:22 by retanaka          #+#    #+#             */
-/*   Updated: 2025/01/13 12:30:23 by retanaka         ###   ########.fr       */
+/*   Created: 2025/02/21 09:28:01 by retanaka          #+#    #+#             */
+/*   Updated: 2025/02/21 09:28:18 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	destroy(int num_of_frks, t_philo *philos, t_fork *forks, t_pval *pvals)
+long	get_time(void)
 {
-	destroy_mutexes(PVALS_LEN, pvals);
-	free(philos);
-	if (forks != NULL)
-	{
-		destroy_mutexes(num_of_frks, forks);
-		free(forks);
-	}
+	struct timeval	tv;
+	long			time;
+
+	gettimeofday(&tv, NULL);
+	time = tv.tv_sec * (long)KILO + tv.tv_usec / (long)KILO;
+	return (time);
 }
+// get_time no check

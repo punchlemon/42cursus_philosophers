@@ -6,73 +6,58 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:16:58 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/18 16:38:12 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:07:09 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_time(void)
+int	set_mutex_value(t_philo *p, int id, long value)
 {
-	struct timeval	tv;
-	long			time;
-
-	gettimeofday(&tv, NULL);
-	time = tv.tv_sec * (long)KILO + tv.tv_usec / (long)KILO;
-	return (time);
-}
-// get_time no check
-
-long	print_with_timestamp_safe(t_philo *p, const char *str)
-{
-	long	now;
-
-	now = 0;
-	pthread_mutex_lock(&p->pvals[DIED_ID].mutex);
-	if (p->pvals[DIED_ID].value == FAILURE)
-	{
-		pthread_mutex_lock(&p->pvals[PRINT_ID].mutex);
-		now = get_time();
-		if (p->dead_time < now)
-		{
-			now = FAILURE;
-			p->pvals[DIED_ID].value = p->id;
-		}
-		else
-			printf("%ld %ld %s\n", now, p->id, str);
-		pthread_mutex_unlock(&p->pvals[PRINT_ID].mutex);
-	}
-	else
-		now = FAILURE;
-	pthread_mutex_unlock(&p->pvals[DIED_ID].mutex);
-	return (now);
+	if (priority_mutex_lock(p, id) == FAILURE)
+		return (FAILURE);
+	p->resources[id].value = value;
+	priority_mutex_unlock(p, id);
+	return (SUCCESS);
 }
 
-void	set_mutex_value(t_pval *pval, long value)
+int	get_mutex_value(t_philo *p, int id, long *value_p)
 {
-	pthread_mutex_lock(&pval->mutex);
-	pval->value = value;
-	pthread_mutex_unlock(&pval->mutex);
+	if (priority_mutex_lock(p, id) == FAILURE)
+		return (FAILURE);
+	*value_p = p->resources[id].value;
+	priority_mutex_unlock(p, id);
+	return (SUCCESS);
 }
 
-long	get_mutex_value(t_pval *pval)
+int	priority_mutex_lock(t_philo *p, int id)
 {
-	long	value;
-
-	pthread_mutex_lock(&pval->mutex);
-	value = pval->value;
-	pthread_mutex_unlock(&pval->mutex);
-	return (value);
-}
-
-void	destroy_mutexes(int num_of_pvals, t_pval *pvals)
-{
+	int	last_resource_id;
 	int	i;
 
+	last_resource_id = 0;
 	i = 0;
-	while (i < num_of_pvals)
+	while (i < RESOURCES_LEN)
 	{
-		pthread_mutex_destroy(&pvals[i].mutex);
+		if (p->locked_resources[i])
+			last_resource_id = i;
 		i++;
 	}
+	if (last_resource_id >= id)
+		return (FAILURE);
+	p->locked_resources[id] = true;
+	pthread_mutex_lock(&p->resources[id].mutex);
+	return (SUCCESS);
+}
+
+void	priority_mutex_unlock(t_philo *p, int id)
+{
+	p->locked_resources[id] = false;
+	pthread_mutex_unlock(&p->resources[id].mutex);
+}
+
+void	destroy_mutexes(t_resource *resources, int i)
+{
+	while (i)
+		pthread_mutex_destroy(&resources[--i].mutex);
 }
