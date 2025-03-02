@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 09:28:50 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 17:46:25 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:38:20 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,12 @@ int	print_utils(t_philo *p, const char *str, long *now_p)
 	if (p->dead_time < now)
 	{
 		p->resources[DIED_ID].value = p->id;
-		printf("%ld %ld %s\n", now, p->id, "died");
+		printf("%ld %ld %s\n", now - p->start_time, p->id, "died");
 		result = FAILURE;
 	}
 	else
 	{
-		(void)str;
-		printf("%ld %ld %s\n", now, p->id, str);
+		printf("%ld %ld %s\n", now - p->start_time, p->id, str);
 		result = SUCCESS;
 	}
 	priority_mutex_unlock(p, PRINT_ID);

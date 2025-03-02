@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 19:10:30 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:36:35 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_philo
 	long		id;
 	t_data		d;
 	t_resource	*resources;
+	long		start_time;
 	long		dead_time;
 	long		first_time_to_think;
 	int			locked_resources[RESOURCES_LEN];
@@ -92,7 +93,7 @@ int		priority_mutex_lock(t_philo *p, int id);
 void	priority_mutex_unlock(t_philo *p, int id);
 void	destroy_mutexes(t_resource *resources, int i);
 
-void	set_died(t_philo *p);
+void	set_died(t_philo *p, int is_print);
 int		my_msleep(long start, long msec, t_philo *p);
 int		process_input(t_data *d, const int argc, const char **argv);
 

@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 19:07:16 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:21:17 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	set_philo(t_philo *p, long n, t_data data, t_resource *resources)
 	p->id = n + 1;
 	p->d = data;
 	p->resources = resources;
+	p->start_time = 0;
 	p->dead_time = 0;
 	if (p->id % 2)
 		p->first_time_to_think = 0;

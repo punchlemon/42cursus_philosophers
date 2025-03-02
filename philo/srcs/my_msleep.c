@@ -6,23 +6,26 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 19:12:19 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:36:22 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_died(t_philo *p)
+void	set_died(t_philo *p, int is_print)
 {
 	if (priority_mutex_lock(p, DIED_ID) == FAILURE)
 		return ((void)func_abort("Can't lock DIED_ID", NULL));
 	if (p->resources[DIED_ID].value == FAILURE)
 	{
 		p->resources[DIED_ID].value = p->id;
-		if (priority_mutex_lock(p, PRINT_ID) == FAILURE)
-			return ((void)func_abort("Can't lock PRINT_ID", NULL));
-		printf("%ld %ld %s\n", get_time(), p->id, "died");
-		priority_mutex_unlock(p, PRINT_ID);
+		if (is_print)
+		{
+			if (priority_mutex_lock(p, PRINT_ID) == FAILURE)
+				return ((void)func_abort("Can't lock PRINT_ID", NULL));
+			printf("%ld %ld %s\n", get_time() - p->start_time, p->id, "died");
+			priority_mutex_unlock(p, PRINT_ID);
+		}
 	}
 	priority_mutex_unlock(p, DIED_ID);
 }
@@ -42,7 +45,7 @@ int	my_msleep(long start, long msec, t_philo *p)
 		if (died_id != FAILURE)
 			return (FAILURE);
 		if (p->dead_time < now)
-			return (set_died(p), FAILURE);
+			return (set_died(p, true), FAILURE);
 		usleep(NYQUIST_INTERVAL);
 		now = get_time();
 	}
