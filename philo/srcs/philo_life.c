@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 18:30:48 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:52:47 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,23 @@ long	philo_life_init(t_philo *p, long *start_time_p)
 	return (*start_time_p);
 }
 
+int	philo_think(t_philo *p)
+{
+	long	now;
+
+	if (print_with_timestamp(p, "is thinking", &now) == FAILURE)
+		return (FAILURE);
+	if (p->count == 0)
+	{
+		if (my_msleep(now, p->first_time_to_think, p) == FAILURE)
+			return (FAILURE);
+	}
+	else if (p->d.num_of_times_to_eat != 0
+		&& p->count >= p->d.num_of_times_to_eat)
+		return (FAILURE);
+	return (SUCCESS);
+}
+
 int	philo_sleep(t_philo *p)
 {
 	long	now;
@@ -61,15 +78,7 @@ void	*start_philo_life(void *arg)
 		return (NULL);
 	while (true)
 	{
-		if (print_with_timestamp(p, "is thinking", NULL) == FAILURE)
-			return (NULL);
-		if (p->count == 0)
-		{
-			if (my_msleep(start_time, p->first_time_to_think, p) == FAILURE)
-				return (NULL);
-		}
-		else if (p->d.num_of_times_to_eat != 0
-			&& p->count >= p->d.num_of_times_to_eat)
+		if (philo_think(p) == FAILURE)
 			return (NULL);
 		if (philo_eat(p) == FAILURE)
 			return (NULL);
