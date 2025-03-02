@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:58:44 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 18:28:57 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:55:50 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,5 @@ int	philo_eat(t_philo *p)
 	if (my_msleep(now, p->d.time_to_eat, p) == FAILURE)
 		return (_put_down_forks(p, fork1, fork2), FAILURE);
 	_put_down_forks(p, fork1, fork2);
-	p->count++;
 	return (SUCCESS);
 }

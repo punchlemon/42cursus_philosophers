@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 18:52:47 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:56:41 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void	*start_philo_life(void *arg)
 			return (NULL);
 		if (philo_sleep(p) == FAILURE)
 			return (NULL);
+		if (p->d.num_of_times_to_eat != 0)
+			p->count++;
 	}
 	return (NULL);
 }
