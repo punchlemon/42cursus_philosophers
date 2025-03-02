@@ -6,13 +6,13 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/21 20:23:13 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:12:19 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	_set_died(t_philo *p)
+void	set_died(t_philo *p)
 {
 	if (priority_mutex_lock(p, DIED_ID) == FAILURE)
 		return ((void)func_abort("Can't lock DIED_ID", NULL));
@@ -42,7 +42,7 @@ int	my_msleep(long start, long msec, t_philo *p)
 		if (died_id != FAILURE)
 			return (FAILURE);
 		if (p->dead_time < now)
-			return (_set_died(p), FAILURE);
+			return (set_died(p), FAILURE);
 		usleep(NYQUIST_INTERVAL);
 		now = get_time();
 	}

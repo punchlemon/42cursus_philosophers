@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 18:56:41 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:11:41 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,15 @@ int	philo_think(t_philo *p)
 		if (my_msleep(now, p->first_time_to_think, p) == FAILURE)
 			return (FAILURE);
 	}
-	else if (p->d.num_of_times_to_eat != 0
-		&& p->count >= p->d.num_of_times_to_eat)
-		return (FAILURE);
+	else if (p->is_incompleted && p->count >= p->d.num_of_times_to_eat)
+	{
+		priority_mutex_lock(p, COMPLETED_ID);
+		p->resources[COMPLETED_ID].value++;
+		p->is_incompleted = false;
+		if (p->resources[COMPLETED_ID].value == p->d.num_of_philos)
+			set_died(p);
+		priority_mutex_unlock(p, COMPLETED_ID);
+	}
 	return (SUCCESS);
 }
 
@@ -84,7 +90,7 @@ void	*start_philo_life(void *arg)
 			return (NULL);
 		if (philo_sleep(p) == FAILURE)
 			return (NULL);
-		if (p->d.num_of_times_to_eat != 0)
+		if (p->is_incompleted)
 			p->count++;
 	}
 	return (NULL);

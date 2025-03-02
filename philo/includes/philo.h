@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 18:25:20 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/02 19:10:30 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ enum
 {
 	FORK_ID = 1,
 	START_ID = FORK_ID + NUM_OF_FORKS_MAX,
+	COMPLETED_ID,
 	DIED_ID,
 	PRINT_ID,
 	RESOURCES_LEN
@@ -74,6 +75,7 @@ typedef struct s_philo
 	long		first_time_to_think;
 	int			locked_resources[RESOURCES_LEN];
 	int			count;
+	int			is_incompleted;
 }	t_philo;
 
 int		func_abort(const char *str1, const char *str2);
@@ -90,6 +92,7 @@ int		priority_mutex_lock(t_philo *p, int id);
 void	priority_mutex_unlock(t_philo *p, int id);
 void	destroy_mutexes(t_resource *resources, int i);
 
+void	set_died(t_philo *p);
 int		my_msleep(long start, long msec, t_philo *p);
 int		process_input(t_data *d, const int argc, const char **argv);
 
