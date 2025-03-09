@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 18:01:20 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:10:59 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	_set_resources(pthread_mutex_t *forks, t_super *super_p, int num_of_f
 	i = 0;
 	while (true)
 	{
-		if (pthread_mutex_init(&forks[i], NULL) != 0)
+		if (pthread_mutex_init(&forks[i++], NULL) != 0)
 			break ;
 		if (i == num_of_forks)
 		{
