@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 15:08:37 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 19:14:28 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	my_msleep(long msec, t_philo *p)
 	long	limit;
 	bool	will_die;
 
-	will_die = p->last_log_time + msec >= p->dead_time;
+	will_die = ((p->last_log_time + msec) >= p->dead_time);
 	if (will_die)
 		limit = p->dead_time;
 	else

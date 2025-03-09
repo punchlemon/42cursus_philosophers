@@ -6,18 +6,15 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 17:59:25 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 19:29:17 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "ft_dprintf.h"
 
-static void	_set_philo_with_calc(t_philo *p, pthread_mutex_t *forks)
+static void	_set_philo_time2think(t_philo *p)
 {
-	int		fork1_id;
-	int		fork2_id;
-	int		tmp;
 	float	delta_time;
 
 	if (p->id % 2)
@@ -25,19 +22,40 @@ static void	_set_philo_with_calc(t_philo *p, pthread_mutex_t *forks)
 	else
 		p->first_time2think = p->d.time2eat;
 	delta_time = (float)p->d.time2eat / (float)(p->d.num_of_philos / 2);
+	p->time2think = p->d.time2eat - p->d.time2sleep;
 	if (p->d.num_of_philos != 1 && p->d.num_of_philos % 2)
-		p->first_time2think += (int)(delta_time * (p->id / 2));
-	p->time2think = (int)delta_time;
-	fork1_id = p->id - 1;
-	fork2_id = (p->id % p->d.num_of_philos);
-	if (fork1_id > fork2_id)
 	{
-		tmp = fork1_id;
-		fork1_id = fork2_id;
-		fork2_id = tmp;
+		p->first_time2think += (int)(delta_time * (p->id / 2));
+		p->time2think += (int)delta_time;
 	}
-	p->fork1 = &forks[fork1_id];
-	p->fork2 = &forks[fork2_id];
+	if (p->time2think < 0)
+		p->time2think = 0;
+}
+
+static void	_set_philo_fork(t_philo *p, pthread_mutex_t *forks)
+{
+	int		fork1_id;
+	int		fork2_id;
+	int		tmp;
+
+	if (p->d.num_of_philos == 1)
+	{
+		p->fork1 = &forks[0];
+		p->fork2 = NULL;
+	}
+	else
+	{
+		fork1_id = p->id - 1;
+		fork2_id = (p->id % p->d.num_of_philos);
+		if (fork1_id > fork2_id)
+		{
+			tmp = fork1_id;
+			fork1_id = fork2_id;
+			fork2_id = tmp;
+		}
+		p->fork1 = &forks[fork1_id];
+		p->fork2 = &forks[fork2_id];
+	}
 }
 
 static void	_set_philos(t_philo *philos, pthread_mutex_t *forks, t_super *super,
@@ -57,7 +75,8 @@ t_data d)
 		philo->dead_time = 0;
 		philo->count = 0;
 		philo->is_incompleted = (philo->d.num_of_times2eat != 0);
-		_set_philo_with_calc(&philos[i], forks);
+		_set_philo_time2think(&philos[i]);
+		_set_philo_fork(&philos[i], forks);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 17:52:18 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 19:29:52 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ int	philo_eat(t_philo *p)
 
 	pthread_mutex_lock(p->fork1);
 	print_with_timestamp(p, "has taken a fork", NULL);
+	if (p->d.num_of_philos == 1)
+		return (my_msleep(p->d.time2die + 100, p),
+			pthread_mutex_unlock(p->fork1), FAILURE);
 	pthread_mutex_lock(p->fork2);
 	print_with_timestamp(p, "has taken a fork", NULL);
 	result = FAILURE;
@@ -118,7 +121,7 @@ void	*simulate_philo(void *arg)
 			return (NULL);
 		if (philo_sleep(p) == FAILURE)
 			return (NULL);
-		if (p->is_incompleted)
+		if (p->count == 0 || p->is_incompleted)
 			p->count++;
 	}
 	return (NULL);
