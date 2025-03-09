@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 12:48:16 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 19:36:22 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:08:37 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,38 @@
 
 void	set_died(t_philo *p, int is_print)
 {
-	if (priority_mutex_lock(p, DIED_ID) == FAILURE)
-		return ((void)func_abort("Can't lock DIED_ID", NULL));
-	if (p->resources[DIED_ID].value == FAILURE)
+	pthread_mutex_lock(&p->super->mutex);
+	if (!p->super->is_dead)
 	{
-		p->resources[DIED_ID].value = p->id;
+		p->super->is_dead = true;
 		if (is_print)
-		{
-			if (priority_mutex_lock(p, PRINT_ID) == FAILURE)
-				return ((void)func_abort("Can't lock PRINT_ID", NULL));
-			printf("%ld %ld %s\n", get_time() - p->start_time, p->id, "died");
-			priority_mutex_unlock(p, PRINT_ID);
-		}
+			printf("%ld %ld %s\n", philo_get_time(p), p->id, "died");
 	}
-	priority_mutex_unlock(p, DIED_ID);
+	pthread_mutex_unlock(&p->super->mutex);
 }
 
-int	my_msleep(long start, long msec, t_philo *p)
+int	my_msleep(long msec, t_philo *p)
 {
-	long	goal;
-	long	now;
-	long	died_id;
+	long	limit;
+	bool	will_die;
 
-	goal = start + msec;
-	now = get_time();
-	while (goal > now)
+	will_die = p->last_log_time + msec >= p->dead_time;
+	if (will_die)
+		limit = p->dead_time;
+	else
 	{
-		if (get_mutex_value(p, DIED_ID, &died_id) == FAILURE)
-			return (FAILURE);
-		if (died_id != FAILURE)
-			return (FAILURE);
-		if (p->dead_time < now)
-			return (set_died(p, true), FAILURE);
-		usleep(NYQUIST_INTERVAL);
-		now = get_time();
+		p->last_log_time += msec;
+		limit = p->last_log_time;
 	}
+	while (limit > philo_get_time(p))
+	{
+		pthread_mutex_lock(&p->super->mutex);
+		if (p->super->is_dead)
+			return (pthread_mutex_unlock(&p->super->mutex), FAILURE);
+		pthread_mutex_unlock(&p->super->mutex);
+		usleep(NYQUIST_INTERVAL);
+	}
+	if (will_die)
+		return (set_died(p, true), FAILURE);
 	return (SUCCESS);
 }

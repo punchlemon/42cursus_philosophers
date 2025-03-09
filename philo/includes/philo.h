@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/02 19:36:35 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:58:00 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,60 +43,63 @@ enum
 enum
 {
 	FORK_ID = 1,
-	START_ID = FORK_ID + NUM_OF_FORKS_MAX,
-	COMPLETED_ID,
-	DIED_ID,
-	PRINT_ID,
+	SUPER_ID = FORK_ID + NUM_OF_FORKS_MAX,
 	RESOURCES_LEN
 };
 
-typedef struct s_resource
+typedef struct s_super
+{
+	pthread_mutex_t	mutex;
+	long			start_time;
+	int				completed_philos_num;
+	bool			is_dead;
+}	t_super;
+
+typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
 	long			value;
-}	t_resource;
+}	t_fork;
 
 typedef struct s_data
 {
 	int	num_of_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	num_of_times_to_eat;
+	int	time2die;
+	int	time2eat;
+	int	time2sleep;
+	int	num_of_times2eat;
 }	t_data;
 // when endless setting, you should is 0
 
 typedef struct s_philo
 {
+	t_fork		*fork1;
+	t_fork		*fork2;
+	t_super		*super;
 	long		id;
 	t_data		d;
-	t_resource	*resources;
 	long		start_time;
+	long		last_log_time;
 	long		dead_time;
-	long		first_time_to_think;
-	int			locked_resources[RESOURCES_LEN];
 	int			count;
 	int			is_incompleted;
+	long		first_time2think;
+	long		time2think;
 }	t_philo;
 
-int		func_abort(const char *str1, const char *str2);
-int		create_philos(t_data d, pthread_t *tids, t_philo *philos,
-			t_resource *resources);
-void	*start_philo_life(void *arg);
+int		start_simulation(t_philo *philos, t_fork *forks, t_super *super,
+			t_data d);
+void	*simulate_philo(void *arg);
 
 long	get_time(void);
+long	philo_get_time(t_philo *p);
+
 int		print_with_timestamp(t_philo *p, const char *str, long *now_p);
 
-int		set_mutex_value(t_philo *p, int id, long value);
-int		get_mutex_value(t_philo *p, int id, long *value_p);
-int		priority_mutex_lock(t_philo *p, int id);
-void	priority_mutex_unlock(t_philo *p, int id);
-void	destroy_mutexes(t_resource *resources, int i);
+void	destroy_mutexes(t_fork *forks, int i, t_super *super);
 
 void	set_died(t_philo *p, int is_print);
-int		my_msleep(long start, long msec, t_philo *p);
+int		my_msleep(long msec, t_philo *p);
 int		process_input(t_data *d, const int argc, const char **argv);
-
-int		philo_eat(t_philo *p);
 
 #endif

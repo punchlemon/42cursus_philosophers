@@ -28,16 +28,11 @@ $(addsuffix .c, \
 			ft_dputoct \
 			ft_dputptr \
 		) \
-		abort \
-		create \
-		get_time \
 		main \
-		mutex \
 		my_msleep \
-		philo_eat \
-		philo_life \
-		print_with_timestamp \
 		process_input \
+		simulate_philo \
+		start_simulation \
 	) \
 ) \
 
