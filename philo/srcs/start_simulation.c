@@ -6,14 +6,14 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:46:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/02/19 16:41:08 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:59:25 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "ft_dprintf.h"
 
-static void	_set_philo_with_calc(t_philo *p, t_fork *forks)
+static void	_set_philo_with_calc(t_philo *p, pthread_mutex_t *forks)
 {
 	int		fork1_id;
 	int		fork2_id;
@@ -40,7 +40,7 @@ static void	_set_philo_with_calc(t_philo *p, t_fork *forks)
 	p->fork2 = &forks[fork2_id];
 }
 
-static void	_set_philos(t_philo *philos, t_fork *forks, t_super *super,
+static void	_set_philos(t_philo *philos, pthread_mutex_t *forks, t_super *super,
 t_data d)
 {
 	long		i;
@@ -89,7 +89,7 @@ static int	_create_philos(t_philo *philos, pthread_t *tids, int num_of_philos)
 	return (FAILURE);
 }
 
-int	start_simulation(t_philo *philos, t_fork *forks, t_super *super,
+int	start_simulation(t_philo *philos, pthread_mutex_t *forks, t_super *super,
 t_data d)
 {
 	pthread_t	tids[NUM_OF_PHILOS_MAX];

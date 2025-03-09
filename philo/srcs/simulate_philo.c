@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_life.c                                       :+:      :+:    :+:   */
+/*   simulate_philo.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:43:51 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 16:37:00 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:52:18 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int	philo_eat(t_philo *p)
 	long	now;
 	int		result;
 
-	pthread_mutex_lock(&p->fork1->mutex);
+	pthread_mutex_lock(p->fork1);
 	print_with_timestamp(p, "has taken a fork", NULL);
-	pthread_mutex_lock(&p->fork2->mutex);
+	pthread_mutex_lock(p->fork2);
 	print_with_timestamp(p, "has taken a fork", NULL);
 	result = FAILURE;
 	if (print_with_timestamp(p, "is eating", &now) == SUCCESS)
@@ -84,8 +84,8 @@ int	philo_eat(t_philo *p)
 		if (my_msleep(p->d.time2eat, p) == SUCCESS)
 			result = SUCCESS;
 	}
-	pthread_mutex_unlock(&p->fork1->mutex);
-	pthread_mutex_unlock(&p->fork2->mutex);
+	pthread_mutex_unlock(p->fork1);
+	pthread_mutex_unlock(p->fork2);
 	return (result);
 }
 

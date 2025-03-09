@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 16:37:50 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:01:20 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,23 @@ long	philo_get_time(t_philo *p)
 }
 // get_time no check
 
-void	destroy_mutexes(t_fork *forks, int i, t_super *super)
+void	destroy_mutexes(pthread_mutex_t *forks, int i, t_super *super)
 {
 	if (super)
 		pthread_mutex_destroy(&super->mutex);
 	while (i)
-		pthread_mutex_destroy(&forks[--i].mutex);
+		pthread_mutex_destroy(&forks[--i]);
 }
 
-static int	_set_resources(t_fork *forks, t_super *super_p, int num_of_forks)
+static int	_set_resources(pthread_mutex_t *forks, t_super *super_p, int num_of_forks)
 {
 	int	i;
 
 	i = 0;
 	while (true)
 	{
-		if (pthread_mutex_init(&forks[i].mutex, NULL) != 0)
+		if (pthread_mutex_init(&forks[i], NULL) != 0)
 			break ;
-		forks[i++].value = FAILURE;
 		if (i == num_of_forks)
 		{
 			if (pthread_mutex_init(&super_p->mutex, NULL) != 0)
@@ -86,10 +85,10 @@ int	print_with_timestamp(t_philo *p, const char *str, long *now_p)
 
 int	main(const int argc, const char **argv)
 {
-	t_data		d;
-	t_super		super;
-	t_fork		forks[NUM_OF_FORKS_MAX];
-	t_philo		philos[NUM_OF_PHILOS_MAX];
+	t_data			d;
+	t_super			super;
+	pthread_mutex_t	forks[NUM_OF_FORKS_MAX];
+	t_philo			philos[NUM_OF_PHILOS_MAX];
 
 	if (process_input(&d, argc, argv) == FAILURE)
 		return (EXIT_FAILURE);

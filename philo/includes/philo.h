@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:46:13 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 15:58:00 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:58:12 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,6 @@ typedef struct s_super
 	bool			is_dead;
 }	t_super;
 
-typedef struct s_fork
-{
-	pthread_mutex_t	mutex;
-	long			value;
-}	t_fork;
-
 typedef struct s_data
 {
 	int	num_of_philos;
@@ -73,22 +67,22 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-	t_fork		*fork1;
-	t_fork		*fork2;
-	t_super		*super;
-	long		id;
-	t_data		d;
-	long		start_time;
-	long		last_log_time;
-	long		dead_time;
-	int			count;
-	int			is_incompleted;
-	long		first_time2think;
-	long		time2think;
+	pthread_mutex_t	*fork1;
+	pthread_mutex_t	*fork2;
+	t_super			*super;
+	long			id;
+	t_data			d;
+	long			start_time;
+	long			last_log_time;
+	long			dead_time;
+	int				count;
+	int				is_incompleted;
+	long			first_time2think;
+	long			time2think;
 }	t_philo;
 
-int		start_simulation(t_philo *philos, t_fork *forks, t_super *super,
-			t_data d);
+int		start_simulation(t_philo *philos, pthread_mutex_t *forks,
+			t_super *super, t_data d);
 void	*simulate_philo(void *arg);
 
 long	get_time(void);
@@ -96,7 +90,7 @@ long	philo_get_time(t_philo *p);
 
 int		print_with_timestamp(t_philo *p, const char *str, long *now_p);
 
-void	destroy_mutexes(t_fork *forks, int i, t_super *super);
+void	destroy_mutexes(pthread_mutex_t *forks, int i, t_super *super);
 
 void	set_died(t_philo *p, int is_print);
 int		my_msleep(long msec, t_philo *p);
