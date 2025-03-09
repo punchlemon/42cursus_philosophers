@@ -6,7 +6,7 @@
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:06 by retanaka          #+#    #+#             */
-/*   Updated: 2025/03/09 18:10:59 by retanaka         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:33:28 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	destroy_mutexes(pthread_mutex_t *forks, int i, t_super *super)
 		pthread_mutex_destroy(&forks[--i]);
 }
 
-static int	_set_resources(pthread_mutex_t *forks, t_super *super_p, int num_of_forks)
+static int	_set_resources(pthread_mutex_t *forks, t_super *super_p,
+int num_of_forks)
 {
 	int	i;
 
